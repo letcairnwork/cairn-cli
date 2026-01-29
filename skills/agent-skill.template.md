@@ -4,6 +4,17 @@ You are working within Cairn, an AI-native project management platform. Cairn is
 
 Cairn is the platform, not an agent. You are the agent.
 
+## Your Identity
+
+Detect your agent name from your environment for task assignments:
+- **Clawdbot**: Read `IDENTITY.md` or `USER.md` in workspace, or use the configured user identity
+- **Other agents**: Use `$USER` environment variable, git config user.name, or ask your human
+
+Use this identity when:
+- Assigning yourself to tasks (`assignee: <your-name>`)
+- Logging work (`[<your-name>]` in log entries)
+- Creating new tasks with default assignee
+
 ## How Cairn Works
 
 - **Quests** = What you're trying to achieve (charter.md)
@@ -93,14 +104,14 @@ This is not optional. Wrong status = miscommunication. The human monitors task s
 # 1. Hit blocker - need API credentials
 # 2. Edit file immediately
 edit(path="{{WORKSPACE_PATH}}/quests/launch-cairn/paths/identify-early-adopters/steps/03-build-prospect-list.md",
-     oldText="status: in_progress\nassignee: {{AGENT_NAME}}",
-     newText="status: blocked\nassignee: {{AGENT_NAME}}\nblocker: Need Twitter API credentials")
+     oldText="status: in_progress\nassignee: your-agent-name",
+     newText="status: blocked\nassignee: your-agent-name\nblocker: Need Twitter API credentials")
 
 # 3. Verify
 grep "status: blocked" {{WORKSPACE_PATH}}/quests/.../03-build-prospect-list.md
 
 # 4. Log it
-echo "- $(date +%Y-%m-%d\ %H:%M) [{{AGENT_NAME}}] → gregory: Blocked on Twitter API credentials. Where can I find them?" >> file.md
+echo "- $(date +%Y-%m-%d\ %H:%M) [your-agent-name] → gregory: Blocked on Twitter API credentials. Where can I find them?" >> file.md
 
 # 5. NOW ask the question
 "I need Twitter API credentials to continue with the prospect list. Where can I find them?"
@@ -231,7 +242,7 @@ The CLI ensures all required frontmatter fields are included and validates the s
 
 **Optional:**
 - `--quest <slug>` - Quest slug (auto-detected from path if not provided)
-- `--assignee <name>` - Default: `{{AGENT_NAME}}`
+- `--assignee <name>` - Default: `your-agent-name`
 - `--status <status>` - Default: `pending`
 - `--due YYYY-MM-DD` - Default: 7 days from now
 - `--autonomy <level>` - Default: `draft`
@@ -242,7 +253,7 @@ The CLI ensures all required frontmatter fields are included and validates the s
 ```bash
 {{WORKSPACE_ROOT}}/cairn/scripts/cairn.js create step "Research Anthropic roles" \
   --path application-strategy \
-  --assignee {{AGENT_NAME}} \
+  --assignee your-agent-name \
   --description "Identify open product roles at Anthropic" \
   --objective "Review careers page and LinkedIn, compile list of relevant positions"
 ```
@@ -278,7 +289,7 @@ The CLI ensures all required frontmatter fields are included and validates the s
 ```
 
 **Optional:**
-- `--owner <name>` - Default: `{{AGENT_NAME}}`
+- `--owner <name>` - Default: `your-agent-name`
 - `--status <status>` - Default: `active`
 - `--priority <1-5>` - Default: `2` (1=urgent, 5=someday)
 - `--due YYYY-MM-DD` - Default: 7 days from now
