@@ -31,22 +31,21 @@ program
   .description('Set up Cairn and configure your AI agent')
   .option('--force', 'Force re-onboarding even if already set up')
   .option('--agent <type>', 'Specify agent type (clawdbot|claude-code|cursor|generic)')
-  .option('--path <path>', 'Custom workspace path (default: ~/cairn)')
+  .option('--path <path>', 'Custom workspace path')
   .action(onboard);
 
 // Init command - workspace only, no agent setup
 program
   .command('init')
   .description('Initialize Cairn workspace (without agent configuration)')
-  .option('--path <path>', 'Custom workspace path (default: ~/cairn)')
+  .option('--path <path>', 'Custom workspace path (default: current directory)')
   .action(init);
 
-// Create command - create quests/paths/steps
+// Create command - create projects/tasks
 program
   .command('create <type> <name>')
-  .description('Create a quest, path, or step')
-  .option('--path <slug>', 'Parent path (for steps)')
-  .option('--quest <slug>', 'Parent quest (for paths/steps)')
+  .description('Create a project or task')
+  .option('--project <slug>', 'Parent project (required for tasks)')
   .option('--assignee <name>', 'Assignee name', 'you')
   .option('--status <status>', 'Initial status', 'pending')
   .option('--due <date>', 'Due date (YYYY-MM-DD)')

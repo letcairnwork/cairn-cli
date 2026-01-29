@@ -58,7 +58,7 @@ cairn onboard --force            # Re-run onboarding
 Initialize workspace without agent configuration.
 
 ```bash
-cairn init                # Create ~/pms
+cairn init                # Create workspace in current directory
 cairn init --path /custom # Custom location
 ```
 
@@ -115,7 +115,7 @@ Cairn auto-detects and configures:
 ### File Structure
 
 ```
-~/pms/
+~/cairn/
   projects/
     launch-my-app/
       charter.md           # Project overview
@@ -171,7 +171,7 @@ Updates only affect the CLI and agent skills. Your workspace files are never tou
 ## Configuration
 
 Cairn uses sensible defaults:
-- **Workspace:** `~/pms`
+- **Workspace:** Current directory or `~/cairn`
 - **Agent detection:** Automatic
 - **Files:** Plain markdown with YAML frontmatter
 
@@ -200,7 +200,7 @@ cairn onboard --force     # Re-run onboarding
 
 ```bash
 cairn doctor              # Auto-fix common issues
-cairn init --path ~/pms   # Recreate structure
+cairn init --path ~/cairn  # Recreate structure
 ```
 
 ### Skill not updating
