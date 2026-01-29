@@ -19,7 +19,7 @@ Cairn is a project management system designed for working with AI agents. Instea
 - **Files are the source of truth** - No database, just markdown
 - **AI-native** - Designed for AI agents to understand and work with
 - **Agent detection** - Auto-configures for Clawdbot, Claude Code, Cursor, Windsurf
-- **Simple hierarchy** - Quests → Paths → Steps
+- **Simple hierarchy** - Projects → Tasks → Steps
 - **Status tracking** - pending, in_progress, review, blocked, completed
 
 ## Installation
@@ -67,16 +67,16 @@ cairn init --path /custom # Custom location
 Create quests, paths, and steps.
 
 ```bash
-# Create a quest
-cairn create quest "Launch My App"
+# Create a project
+cairn create project "Launch My App"
 
-# Create a path
-cairn create path "Backend API" --quest launch-my-app
+# Create a task
+cairn create task "Backend API" --project launch-my-app
 
 # Create a step
 cairn create step "Set up database" \\
-  --quest launch-my-app \\
-  --path backend-api
+  --project launch-my-app \\
+  --task backend-api
 ```
 
 ### `cairn doctor`
@@ -120,23 +120,23 @@ Cairn auto-detects and configures:
 
 ```
 ~/cairn/
-  quests/
+  projects/
     launch-my-app/
-      charter.md           # Quest overview
-      paths/
+      charter.md           # Project overview
+      tasks/
         backend-api/
-          brief.md         # Path details
+          brief.md         # Task details
           steps/
-            setup-database.md  # Individual task
+            setup-database.md  # Individual step
   inbox/                   # Incoming ideas
   _drafts/                 # Work in progress
 ```
 
-### Quest → Path → Step
+### Project → Task → Step
 
-**Quest** - A project or goal (e.g., "Launch My App")
-**Path** - A way to achieve the quest (e.g., "Backend API")
-**Step** - An atomic task (e.g., "Set up database")
+**Project** - A project or goal (e.g., "Launch My App")
+**Task** - A way to achieve the project (e.g., "Backend API")
+**Step** - An atomic action (e.g., "Set up database")
 
 ### Status Workflow
 
@@ -147,7 +147,7 @@ Or if blocked: `in_progress` → `blocked` → `in_progress`
 ### Working with AI Agents
 
 After onboarding, your agent understands how to:
-- Create and update quests/paths/steps
+- Create and update projects/tasks/steps
 - Follow status workflows
 - Log work with timestamps
 - Ask for input when blocked
@@ -155,9 +155,9 @@ After onboarding, your agent understands how to:
 **Example conversation:**
 ```
 You: "Help me plan out my app launch"
-Agent: "I'll create a quest structure. What's your app called?"
+Agent: "I'll create a project structure. What's your app called?"
 You: "TaskMaster - a todo app"
-Agent: *creates quest with paths for backend, frontend, deployment*
+Agent: *creates project with tasks for backend, frontend, deployment*
 ```
 
 ## Updates

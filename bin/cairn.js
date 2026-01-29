@@ -41,12 +41,12 @@ program
   .option('--path <path>', 'Custom workspace path (default: ~/cairn)')
   .action(init);
 
-// Create command - create quests/paths/steps
+// Create command - create projects/tasks/steps
 program
   .command('create <type> <name>')
-  .description('Create a quest, path, or step')
-  .option('--path <slug>', 'Parent path (for steps)')
-  .option('--quest <slug>', 'Parent quest (for paths/steps)')
+  .description('Create a project, task, or step')
+  .option('--task <slug>', 'Parent task (for steps)')
+  .option('--project <slug>', 'Parent project (for tasks/steps)')
   .option('--assignee <name>', 'Assignee name', 'you')
   .option('--status <status>', 'Initial status', 'pending')
   .option('--due <date>', 'Due date (YYYY-MM-DD)')
