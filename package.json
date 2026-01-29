@@ -1,0 +1,55 @@
+{
+  "name": "cairnquest",
+  "version": "0.1.1",
+  "description": "AI-native project management - work with AI agents using markdown files",
+  "type": "module",
+  "bin": {
+    "cairn": "bin/cairn.js"
+  },
+  "scripts": {
+    "test": "bun test",
+    "dev": "bun link",
+    "build": "echo 'No build step needed'",
+    "prepublishOnly": "bun test"
+  },
+  "files": [
+    "bin/",
+    "lib/",
+    "skills/",
+    "templates/"
+  ],
+  "keywords": [
+    "project-management",
+    "ai",
+    "agents",
+    "markdown",
+    "task-management",
+    "productivity",
+    "clawdbot",
+    "claude-code",
+    "cursor"
+  ],
+  "author": "Gregory Hill",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gregoryehill/cairn.git"
+  },
+  "homepage": "https://cairn.app",
+  "bugs": {
+    "url": "https://github.com/gregoryehill/cairn/issues"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "commander": "^11.0.0",
+    "chalk": "^5.3.0",
+    "ora": "^8.0.0",
+    "inquirer": "^9.2.0"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.1.0",
+    "@types/inquirer": "^9.0.0"
+  }
+}
