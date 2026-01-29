@@ -31,6 +31,7 @@ program
   .option('--force', 'Force re-onboarding even if already set up')
   .option('--agent <type>', 'Specify agent type (clawdbot|claude-code|cursor|generic)')
   .option('--path <path>', 'Custom workspace path (default: ~/pms)')
+  .option('--agent-name <name>', 'Your agent name for task assignments (default: $USER)')
   .action(onboard);
 
 // Init command - workspace only, no agent setup
