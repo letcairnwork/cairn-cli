@@ -1,13 +1,13 @@
 # Cairn: Agent Skill
 
-You are working within Cairn, an AI-native project management platform. Cairn is the source of truth where you and your human coordinate on quests, paths, and steps. Your work lives in markdown files at `/cairn`.
+You are working within Cairn, an AI-native project management platform. Cairn is the source of truth where you and your human coordinate on projects, tasks, and steps. Your work lives in markdown files at `/cairn`.
 
 Cairn is the platform, not an agent. You are the agent.
 
 ## How Cairn Works
 
-- **Quests** = What you're trying to achieve (charter.md)
-- **Paths** = Ways to get there (brief.md)  
+- **Projects** = What you're trying to achieve (charter.md)
+- **Tasks** = Ways to get there (brief.md)  
 - **Steps** = Atomic work assigned to you (step.md)
 - **Inbox** = Raw inputs to triage
 
@@ -24,18 +24,18 @@ Files are the source of truth. You read and write markdown directly.
 
 2. Prioritize by:
    - Overdue first
-   - Due today (by quest priority 1→2→3)
-   - Due this week (by quest priority)
-   - No due date (by quest priority)
+   - Due today (by project priority 1→2→3)
+   - Due this week (by project priority)
+   - No due date (by project priority)
 
 3. Check `/cairn/inbox/` for unprocessed items
 
 ### Picking Up a Step
 
 1. Read the step file
-2. Read the parent path's `brief.md`
-3. Read the parent quest's `charter.md`
-4. Check the `autonomy` field (or inherit from path → quest → default `draft`)
+2. Read the parent task's `brief.md`
+3. Read the parent project's `charter.md`
+4. Check the `autonomy` field (or inherit from task → project → default `draft`)
 
 ### Autonomy Levels
 
@@ -125,25 +125,25 @@ When processing `/cairn/inbox/` items:
 
 1. Read the raw text
 2. Determine intent
-3. Match to existing quest/path
+3. Match to existing project/task
 4. Create step file in appropriate location
 5. Move inbox item to `/cairn/inbox/processed/`
 6. Log what you created:
    ```
-   - YYYY-MM-DD HH:MM [{your-name}] Created from inbox. Original: "{raw text}". Matched to path: {path-slug}.
+   - YYYY-MM-DD HH:MM [{your-name}] Created from inbox. Original: "{raw text}". Matched to task: {task-slug}.
    ```
 
 If it doesn't fit existing structure:
-- Create a proposed path at `/cairn/inbox/proposed-paths/{slug}-brief.md`
+- Create a proposed task at `/cairn/inbox/proposed-tasks/{slug}-brief.md`
 - Wait for human to approve and move it
 
-Never auto-create quests. Propose to human.
+Never auto-create projects. Propose to human.
 
-### Proposing New Paths
+### Proposing New Tasks
 
-If you identify work that needs a new path:
+If you identify work that needs a new task:
 
-1. Create draft at `/cairn/inbox/proposed-paths/{slug}-brief.md`
+1. Create draft at `/cairn/inbox/proposed-tasks/{slug}-brief.md`
 2. Use standard brief format
 3. Log that you proposed it
 4. Human will review, approve, and move to proper location
@@ -200,13 +200,13 @@ When you mark a recurring step `done`:
 
 ```
 /cairn
-  /quests/{quest-slug}/charter.md
-  /quests/{quest-slug}/paths/{path-slug}/brief.md
-  /quests/{quest-slug}/paths/{path-slug}/steps/{step-slug}.md
-  /quests/{quest-slug}/paths/{path-slug}/steps/completed/
+  /projects/{project-slug}/charter.md
+  /projects/{project-slug}/tasks/{task-slug}/brief.md
+  /projects/{project-slug}/tasks/{task-slug}/steps/{step-slug}.md
+  /projects/{project-slug}/tasks/{task-slug}/steps/completed/
   /inbox/
   /inbox/processed/
-  /inbox/proposed-paths/
+  /inbox/proposed-tasks/
   /_drafts/{step-slug}/
   /_conflicts/
   /_abandoned/
@@ -216,21 +216,21 @@ When you mark a recurring step `done`:
 
 ## Creating Cairn Entities
 
-**CRITICAL: ALWAYS use the Cairn CLI helper to create quests, paths, and steps. NEVER create entity files manually.**
+**CRITICAL: ALWAYS use the Cairn CLI helper to create projects, tasks, and steps. NEVER create entity files manually.**
 
 The CLI ensures all required frontmatter fields are included and validates the structure before writing files. This prevents broken UI and tracking issues.
 
 ### Creating Steps
 
 ```bash
-/home/pagoda/cairn/scripts/cairn.js create step "Step Title" --path <path-slug> [options]
+/home/pagoda/cairn/scripts/cairn.js create step "Step Title" --task <task-slug> [options]
 ```
 
 **Required:**
-- `--path <slug>` - The path this step belongs to
+- `--task <slug>` - The task this step belongs to
 
 **Optional:**
-- `--quest <slug>` - Quest slug (auto-detected from path if not provided)
+- `--project <slug>` - Project slug (auto-detected from task if not provided)
 - `--assignee <name>` - Default: `pagoda`
 - `--status <status>` - Default: `pending`
 - `--due YYYY-MM-DD` - Default: 7 days from now
@@ -241,20 +241,20 @@ The CLI ensures all required frontmatter fields are included and validates the s
 **Example:**
 ```bash
 /home/pagoda/cairn/scripts/cairn.js create step "Research Anthropic roles" \
-  --path application-strategy \
+  --task application-strategy \
   --assignee pagoda \
   --description "Identify open product roles at Anthropic" \
   --objective "Review careers page and LinkedIn, compile list of relevant positions"
 ```
 
-### Creating Paths
+### Creating Tasks
 
 ```bash
-/home/pagoda/cairn/scripts/cairn.js create path "Path Title" --quest <quest-slug> [options]
+/home/pagoda/cairn/scripts/cairn.js create task "Task Title" --project <project-slug> [options]
 ```
 
 **Required:**
-- `--quest <slug>` - The quest this path belongs to
+- `--project <slug>` - The project this task belongs to
 
 **Optional:**
 - `--status <status>` - Default: `active`
@@ -265,16 +265,16 @@ The CLI ensures all required frontmatter fields are included and validates the s
 
 **Example:**
 ```bash
-/home/pagoda/cairn/scripts/cairn.js create path "Application Strategy" \
-  --quest find-job-at-ai-company \
+/home/pagoda/cairn/scripts/cairn.js create task "Application Strategy" \
+  --project find-job-at-ai-company \
   --description "Plan and execute applications to top AI companies" \
   --objective "Land interviews at Anthropic, OpenAI, and similar tier companies"
 ```
 
-### Creating Quests
+### Creating Projects
 
 ```bash
-/home/pagoda/cairn/scripts/cairn.js create quest "Quest Title" [options]
+/home/pagoda/cairn/scripts/cairn.js create project "Project Title" [options]
 ```
 
 **Optional:**
@@ -290,7 +290,7 @@ The CLI ensures all required frontmatter fields are included and validates the s
 
 **Example:**
 ```bash
-/home/pagoda/cairn/scripts/cairn.js create quest "Find Job at Top AI Company" \
+/home/pagoda/cairn/scripts/cairn.js create project "Find Job at Top AI Company" \
   --owner gregory \
   --priority 1 \
   --budget 100.00 \
@@ -332,18 +332,18 @@ Reference the context templates for required fields:
 
 Don't just wait for instructions. Look for ways to help.
 
-### Quest Level
-- Notice something untracked → "Should this be a quest?"
-- Quest achieved → "Archive this? What's next?"
-- Gap in coverage → "You have quests for X and Y, but nothing for Z"
-- Quest overlap → "These seem related. Combine?"
+### Project Level
+- Notice something untracked → "Should this be a project?"
+- Project achieved → "Archive this? What's next?"
+- Gap in coverage → "You have projects for X and Y, but nothing for Z"
+- Project overlap → "These seem related. Combine?"
 - External signals (calendar, patterns) → "Based on what's coming, reprioritize?"
 
-### Path Level
-- Path complete → "What's the next path toward this quest?"
-- Path stalled → "This path has 3 blocked steps. Escalating."
-- Path not working → "We've tried X twice. Different approach?"
-- New path needed → Propose one in `/inbox/proposed-paths/`
+### Task Level
+- Task complete → "What's the next task toward this project?"
+- Task stalled → "This task has 3 blocked steps. Escalating."
+- Task not working → "We've tried X twice. Different approach?"
+- New task needed → Propose one in `/inbox/proposed-tasks/`
 
 ### Step Level
 - Step done early → Pick up next step without waiting
@@ -359,7 +359,7 @@ Don't just wait for instructions. Look for ways to help.
 - Identify non-actionable → "This is info, not a step"
 
 ### Budget Level
-- Quest at 80% budget → Alert human
+- Project at 80% budget → Alert human
 - Step seems expensive → "This cost $X. Expected?"
 - Pattern spotted → "Research steps average $2, drafting averages $5"
 
@@ -374,22 +374,22 @@ Don't read every file to find information. Use **progressive disclosure**:
 ### 1. File tree first
 Scan the folder structure. Names are descriptive:
 ```
-/quests/job-at-ai-company/paths/anthropic/steps/send-thank-you-dan.md
+/projects/job-at-ai-company/tasks/anthropic/steps/send-thank-you-dan.md
 ```
 You already know what this is about without opening it.
 
 ### 2. Descriptions second
 Every file has a `description` field in frontmatter. Scan these:
 ```bash
-rg "^description:" quests/*/charter.md
-rg "^description:" quests/*/paths/*/brief.md
+rg "^description:" projects/*/charter.md
+rg "^description:" projects/*/tasks/*/brief.md
 ```
 One line tells you if it's relevant.
 
 ### 3. Outline third
 If a file seems relevant, check its structure:
 ```bash
-grep -n "^#" quests/job/paths/anthropic/brief.md
+grep -n "^#" projects/job/tasks/anthropic/brief.md
 ```
 Maybe you only need one section.
 
@@ -414,7 +414,7 @@ After completing work on a step:
 What you did. Use → for handoffs.
 ```
 
-**Budget check:** If quest budget ≠ `unlimited` AND spent > 80% of budget, note this in your response to the human.
+**Budget check:** If project budget ≠ `unlimited` AND spent > 80% of budget, note this in your response to the human.
 
 **Cost reference:**
 | Model | Input | Output |
