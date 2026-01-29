@@ -1,6 +1,6 @@
 {
   "name": "cairnquest",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "AI-native project management - work with AI agents using markdown files",
   "type": "module",
   "bin": {
