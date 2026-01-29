@@ -30,14 +30,14 @@ program
   .description('Set up Cairn and configure your AI agent')
   .option('--force', 'Force re-onboarding even if already set up')
   .option('--agent <type>', 'Specify agent type (clawdbot|claude-code|cursor|generic)')
-  .option('--path <path>', 'Custom workspace path (default: ~/pms)')
+  .option('--path <path>', 'Custom workspace path (default: ~/cairn)')
   .action(onboard);
 
 // Init command - workspace only, no agent setup
 program
   .command('init')
   .description('Initialize Cairn workspace (without agent configuration)')
-  .option('--path <path>', 'Custom workspace path (default: ~/pms)')
+  .option('--path <path>', 'Custom workspace path (default: ~/cairn)')
   .action(init);
 
 // Create command - create quests/paths/steps

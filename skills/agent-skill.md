@@ -1,6 +1,6 @@
 # Cairn: Agent Skill
 
-You are working within Cairn, an AI-native project management platform. Cairn is the source of truth where you and your human coordinate on quests, paths, and steps. Your work lives in markdown files at `/pms`.
+You are working within Cairn, an AI-native project management platform. Cairn is the source of truth where you and your human coordinate on quests, paths, and steps. Your work lives in markdown files at `/cairn`.
 
 Cairn is the platform, not an agent. You are the agent.
 
@@ -28,7 +28,7 @@ Files are the source of truth. You read and write markdown directly.
    - Due this week (by quest priority)
    - No due date (by quest priority)
 
-3. Check `/pms/inbox/` for unprocessed items
+3. Check `/cairn/inbox/` for unprocessed items
 
 ### Picking Up a Step
 
@@ -92,12 +92,12 @@ This is not optional. Wrong status = miscommunication. The human monitors task s
 ```bash
 # 1. Hit blocker - need API credentials
 # 2. Edit file immediately
-edit(path="/pms/quests/launch-cairn/paths/identify-early-adopters/steps/03-build-prospect-list.md",
+edit(path="/cairn/quests/launch-cairn/paths/identify-early-adopters/steps/03-build-prospect-list.md",
      oldText="status: in_progress\nassignee: pagoda",
      newText="status: blocked\nassignee: pagoda\nblocker: Need Twitter API credentials")
 
 # 3. Verify
-grep "status: blocked" /pms/quests/.../03-build-prospect-list.md
+grep "status: blocked" /cairn/quests/.../03-build-prospect-list.md
 
 # 4. Log it
 echo "- $(date +%Y-%m-%d\ %H:%M) [pagoda] → gregory: Blocked on Twitter API credentials. Where can I find them?" >> file.md
@@ -121,20 +121,20 @@ For longer artifacts:
 
 ### Triaging Inbox
 
-When processing `/pms/inbox/` items:
+When processing `/cairn/inbox/` items:
 
 1. Read the raw text
 2. Determine intent
 3. Match to existing quest/path
 4. Create step file in appropriate location
-5. Move inbox item to `/pms/inbox/processed/`
+5. Move inbox item to `/cairn/inbox/processed/`
 6. Log what you created:
    ```
    - YYYY-MM-DD HH:MM [{your-name}] Created from inbox. Original: "{raw text}". Matched to path: {path-slug}.
    ```
 
 If it doesn't fit existing structure:
-- Create a proposed path at `/pms/inbox/proposed-paths/{slug}-brief.md`
+- Create a proposed path at `/cairn/inbox/proposed-paths/{slug}-brief.md`
 - Wait for human to approve and move it
 
 Never auto-create quests. Propose to human.
@@ -143,7 +143,7 @@ Never auto-create quests. Propose to human.
 
 If you identify work that needs a new path:
 
-1. Create draft at `/pms/inbox/proposed-paths/{slug}-brief.md`
+1. Create draft at `/cairn/inbox/proposed-paths/{slug}-brief.md`
 2. Use standard brief format
 3. Log that you proposed it
 4. Human will review, approve, and move to proper location
@@ -164,7 +164,7 @@ Check if the file changed since you read it (optimistic locking):
 2. **Make your edit** using the `edit` tool (atomic operation)
 3. **IMMEDIATELY verify** the change stuck:
    ```bash
-   grep "artifacts:" /pms/quests/.../step.md
+   grep "artifacts:" /cairn/quests/.../step.md
    ```
 4. **Watch sync logs** to confirm upload (optional but recommended):
    ```bash
@@ -199,7 +199,7 @@ When you mark a recurring step `done`:
 ## File Locations
 
 ```
-/pms
+/cairn
   /quests/{quest-slug}/charter.md
   /quests/{quest-slug}/paths/{path-slug}/brief.md
   /quests/{quest-slug}/paths/{path-slug}/steps/{step-slug}.md
@@ -307,7 +307,7 @@ If you get an error that `/home/pagoda/cairn/scripts/cairn.js` doesn't exist, yo
 2. Read the appropriate template from `/home/pagoda/cairn/context/{entity}.md`
 3. Generate a slug from the title
 4. Validate all required fields are present
-5. Write the file to the correct location in `/home/pagoda/pms/`
+5. Write the file to the correct location in `/home/pagoda/cairn/`
 6. Return success confirmation
 
 Reference the context templates for required fields:
