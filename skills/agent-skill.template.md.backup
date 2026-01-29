@@ -1,8 +1,19 @@
 # Cairn: Agent Skill
 
-You are working within Cairn, an AI-native project management platform. Cairn is the source of truth where you and your human coordinate on quests, paths, and steps. Your work lives in markdown files at `/cairn`.
+You are working within Cairn, an AI-native project management platform. Cairn is the source of truth where you and your human coordinate on quests, paths, and steps. Your work lives in markdown files at `{{WORKSPACE_PATH}}`.
 
 Cairn is the platform, not an agent. You are the agent.
+
+## Your Identity
+
+Detect your agent name from your environment for task assignments:
+- **Clawdbot**: Read `IDENTITY.md` or `USER.md` in workspace, or use the configured user identity
+- **Other agents**: Use `$USER` environment variable, git config user.name, or ask your human
+
+Use this identity when:
+- Assigning yourself to tasks (`assignee: <your-name>`)
+- Logging work (`[<your-name>]` in log entries)
+- Creating new tasks with default assignee
 
 ## How Cairn Works
 
@@ -28,7 +39,7 @@ Files are the source of truth. You read and write markdown directly.
    - Due this week (by quest priority)
    - No due date (by quest priority)
 
-3. Check `/cairn/inbox/` for unprocessed items
+3. Check `{{WORKSPACE_PATH}}/inbox/` for unprocessed items
 
 ### Picking Up a Step
 
@@ -92,15 +103,15 @@ This is not optional. Wrong status = miscommunication. The human monitors task s
 ```bash
 # 1. Hit blocker - need API credentials
 # 2. Edit file immediately
-edit(path="/cairn/quests/launch-cairn/paths/identify-early-adopters/steps/03-build-prospect-list.md",
-     oldText="status: in_progress\nassignee: pagoda",
-     newText="status: blocked\nassignee: pagoda\nblocker: Need Twitter API credentials")
+edit(path="{{WORKSPACE_PATH}}/quests/launch-cairn/paths/identify-early-adopters/steps/03-build-prospect-list.md",
+     oldText="status: in_progress\nassignee: your-agent-name",
+     newText="status: blocked\nassignee: your-agent-name\nblocker: Need Twitter API credentials")
 
 # 3. Verify
-grep "status: blocked" /cairn/quests/.../03-build-prospect-list.md
+grep "status: blocked" {{WORKSPACE_PATH}}/quests/.../03-build-prospect-list.md
 
 # 4. Log it
-echo "- $(date +%Y-%m-%d\ %H:%M) [pagoda] → gregory: Blocked on Twitter API credentials. Where can I find them?" >> file.md
+echo "- $(date +%Y-%m-%d\ %H:%M) [your-agent-name] → gregory: Blocked on Twitter API credentials. Where can I find them?" >> file.md
 
 # 5. NOW ask the question
 "I need Twitter API credentials to continue with the prospect list. Where can I find them?"
@@ -121,20 +132,20 @@ For longer artifacts:
 
 ### Triaging Inbox
 
-When processing `/cairn/inbox/` items:
+When processing `{{WORKSPACE_PATH}}/inbox/` items:
 
 1. Read the raw text
 2. Determine intent
 3. Match to existing quest/path
 4. Create step file in appropriate location
-5. Move inbox item to `/cairn/inbox/processed/`
+5. Move inbox item to `{{WORKSPACE_PATH}}/inbox/processed/`
 6. Log what you created:
    ```
    - YYYY-MM-DD HH:MM [{your-name}] Created from inbox. Original: "{raw text}". Matched to path: {path-slug}.
    ```
 
 If it doesn't fit existing structure:
-- Create a proposed path at `/cairn/inbox/proposed-paths/{slug}-brief.md`
+- Create a proposed path at `{{WORKSPACE_PATH}}/inbox/proposed-paths/{slug}-brief.md`
 - Wait for human to approve and move it
 
 Never auto-create quests. Propose to human.
@@ -143,7 +154,7 @@ Never auto-create quests. Propose to human.
 
 If you identify work that needs a new path:
 
-1. Create draft at `/cairn/inbox/proposed-paths/{slug}-brief.md`
+1. Create draft at `{{WORKSPACE_PATH}}/inbox/proposed-paths/{slug}-brief.md`
 2. Use standard brief format
 3. Log that you proposed it
 4. Human will review, approve, and move to proper location
@@ -164,7 +175,7 @@ Check if the file changed since you read it (optimistic locking):
 2. **Make your edit** using the `edit` tool (atomic operation)
 3. **IMMEDIATELY verify** the change stuck:
    ```bash
-   grep "artifacts:" /cairn/quests/.../step.md
+   grep "artifacts:" {{WORKSPACE_PATH}}/quests/.../step.md
    ```
 4. **Watch sync logs** to confirm upload (optional but recommended):
    ```bash
@@ -199,7 +210,7 @@ When you mark a recurring step `done`:
 ## File Locations
 
 ```
-/cairn
+{{WORKSPACE_PATH}}
   /quests/{quest-slug}/charter.md
   /quests/{quest-slug}/paths/{path-slug}/brief.md
   /quests/{quest-slug}/paths/{path-slug}/steps/{step-slug}.md
@@ -223,7 +234,7 @@ The CLI ensures all required frontmatter fields are included and validates the s
 ### Creating Steps
 
 ```bash
-/home/pagoda/cairn/scripts/cairn.js create step "Step Title" --path <path-slug> [options]
+{{WORKSPACE_ROOT}}/cairn/scripts/cairn.js create step "Step Title" --path <path-slug> [options]
 ```
 
 **Required:**
@@ -231,7 +242,7 @@ The CLI ensures all required frontmatter fields are included and validates the s
 
 **Optional:**
 - `--quest <slug>` - Quest slug (auto-detected from path if not provided)
-- `--assignee <name>` - Default: `pagoda`
+- `--assignee <name>` - Default: `your-agent-name`
 - `--status <status>` - Default: `pending`
 - `--due YYYY-MM-DD` - Default: 7 days from now
 - `--autonomy <level>` - Default: `draft`
@@ -240,9 +251,9 @@ The CLI ensures all required frontmatter fields are included and validates the s
 
 **Example:**
 ```bash
-/home/pagoda/cairn/scripts/cairn.js create step "Research Anthropic roles" \
+{{WORKSPACE_ROOT}}/cairn/scripts/cairn.js create step "Research Anthropic roles" \
   --path application-strategy \
-  --assignee pagoda \
+  --assignee your-agent-name \
   --description "Identify open product roles at Anthropic" \
   --objective "Review careers page and LinkedIn, compile list of relevant positions"
 ```
@@ -250,7 +261,7 @@ The CLI ensures all required frontmatter fields are included and validates the s
 ### Creating Paths
 
 ```bash
-/home/pagoda/cairn/scripts/cairn.js create path "Path Title" --quest <quest-slug> [options]
+{{WORKSPACE_ROOT}}/cairn/scripts/cairn.js create path "Path Title" --quest <quest-slug> [options]
 ```
 
 **Required:**
@@ -265,7 +276,7 @@ The CLI ensures all required frontmatter fields are included and validates the s
 
 **Example:**
 ```bash
-/home/pagoda/cairn/scripts/cairn.js create path "Application Strategy" \
+{{WORKSPACE_ROOT}}/cairn/scripts/cairn.js create path "Application Strategy" \
   --quest find-job-at-ai-company \
   --description "Plan and execute applications to top AI companies" \
   --objective "Land interviews at Anthropic, OpenAI, and similar tier companies"
@@ -274,11 +285,11 @@ The CLI ensures all required frontmatter fields are included and validates the s
 ### Creating Quests
 
 ```bash
-/home/pagoda/cairn/scripts/cairn.js create quest "Quest Title" [options]
+{{WORKSPACE_ROOT}}/cairn/scripts/cairn.js create quest "Quest Title" [options]
 ```
 
 **Optional:**
-- `--owner <name>` - Default: `pagoda`
+- `--owner <name>` - Default: `your-agent-name`
 - `--status <status>` - Default: `active`
 - `--priority <1-5>` - Default: `2` (1=urgent, 5=someday)
 - `--due YYYY-MM-DD` - Default: 7 days from now
@@ -290,7 +301,7 @@ The CLI ensures all required frontmatter fields are included and validates the s
 
 **Example:**
 ```bash
-/home/pagoda/cairn/scripts/cairn.js create quest "Find Job at Top AI Company" \
+{{WORKSPACE_ROOT}}/cairn/scripts/cairn.js create quest "Find Job at Top AI Company" \
   --owner gregory \
   --priority 1 \
   --budget 100.00 \
@@ -301,19 +312,19 @@ The CLI ensures all required frontmatter fields are included and validates the s
 
 ### If the CLI Script Doesn't Exist
 
-If you get an error that `/home/pagoda/cairn/scripts/cairn.js` doesn't exist, you need to create it first. The script should:
+If you get an error that `{{WORKSPACE_ROOT}}/cairn/scripts/cairn.js` doesn't exist, you need to create it first. The script should:
 
 1. Parse command-line arguments for entity type and flags
-2. Read the appropriate template from `/home/pagoda/cairn/context/{entity}.md`
+2. Read the appropriate template from `{{WORKSPACE_ROOT}}/cairn/context/{entity}.md`
 3. Generate a slug from the title
 4. Validate all required fields are present
-5. Write the file to the correct location in `/home/pagoda/cairn/`
+5. Write the file to the correct location in `{{WORKSPACE_ROOT}}{{WORKSPACE_PATH}}/`
 6. Return success confirmation
 
 Reference the context templates for required fields:
-- Steps: `/home/pagoda/cairn/context/step.md`
-- Paths: `/home/pagoda/cairn/context/brief.md`
-- Quests: `/home/pagoda/cairn/context/charter.md`
+- Steps: `{{WORKSPACE_ROOT}}/cairn/context/step.md`
+- Paths: `{{WORKSPACE_ROOT}}/cairn/context/brief.md`
+- Quests: `{{WORKSPACE_ROOT}}/cairn/context/charter.md`
 
 ---
 
