@@ -5,7 +5,7 @@ AI-native project management where markdown files are the source of truth.
 ## Quick Start
 
 ```bash
-npm install -g cairnquest
+npm install -g cairn
 cairn onboard
 ```
 
@@ -19,17 +19,17 @@ Cairn is a project management system designed for working with AI agents. Instea
 - **Files are the source of truth** - No database, just markdown
 - **AI-native** - Designed for AI agents to understand and work with
 - **Agent detection** - Auto-configures for Clawdbot, Claude Code, Cursor, Windsurf
-- **Simple hierarchy** - Quests → Paths → Steps
-- **Status tracking** - pending, in_progress, review, blocked, completed
+- **Simple hierarchy** - Projects → Tasks
+- **Status tracking** - pending, active, review, blocked, completed
 
 ## Installation
 
 ### Global Install (Recommended)
 
 ```bash
-npm install -g cairnquest
+npm install -g cairn
 # or
-bun install -g cairnquest
+bun install -g cairn
 ```
 
 ### Test Locally
@@ -58,25 +58,21 @@ cairn onboard --force            # Re-run onboarding
 Initialize workspace without agent configuration.
 
 ```bash
-cairn init                # Create ~/cairn
+cairn init                # Create ~/pms
 cairn init --path /custom # Custom location
 ```
 
 ### `cairn create`
 
-Create quests, paths, and steps.
+Create projects and tasks.
 
 ```bash
-# Create a quest
-cairn create quest "Launch My App"
+# Create a project
+cairn create project "Launch My App"
 
-# Create a path
-cairn create path "Backend API" --quest launch-my-app
-
-# Create a step
-cairn create step "Set up database" \\
-  --quest launch-my-app \\
-  --path backend-api
+# Create a task
+cairn create task "Set up database" \\
+  --project launch-my-app
 ```
 
 ### `cairn doctor`
@@ -119,35 +115,32 @@ Cairn auto-detects and configures:
 ### File Structure
 
 ```
-~/cairn/
-  quests/
+~/pms/
+  projects/
     launch-my-app/
-      charter.md           # Quest overview
-      paths/
-        backend-api/
-          brief.md         # Path details
-          steps/
-            setup-database.md  # Individual task
+      charter.md           # Project overview
+      tasks/
+        setup-database.md  # Individual task
+        deploy-api.md      # Another task
   inbox/                   # Incoming ideas
   _drafts/                 # Work in progress
 ```
 
-### Quest → Path → Step
+### Project → Task
 
-**Quest** - A project or goal (e.g., "Launch My App")
-**Path** - A way to achieve the quest (e.g., "Backend API")
-**Step** - An atomic task (e.g., "Set up database")
+**Project** - A goal or initiative (e.g., "Launch My App")
+**Task** - An atomic piece of work (e.g., "Set up database")
 
 ### Status Workflow
 
-`pending` → `in_progress` → `review` → `completed`
+`pending` → `active` → `review` → `completed`
 
-Or if blocked: `in_progress` → `blocked` → `in_progress`
+Or if blocked: `active` → `blocked` → `active`
 
 ### Working with AI Agents
 
 After onboarding, your agent understands how to:
-- Create and update quests/paths/steps
+- Create and update projects/tasks
 - Follow status workflows
 - Log work with timestamps
 - Ask for input when blocked
@@ -155,9 +148,9 @@ After onboarding, your agent understands how to:
 **Example conversation:**
 ```
 You: "Help me plan out my app launch"
-Agent: "I'll create a quest structure. What's your app called?"
+Agent: "I'll create a project structure. What's your app called?"
 You: "TaskMaster - a todo app"
-Agent: *creates quest with paths for backend, frontend, deployment*
+Agent: *creates project with tasks for backend, frontend, deployment*
 ```
 
 ## Updates
@@ -170,7 +163,7 @@ Checks npm for the latest version and prompts to upgrade.
 
 Or update manually:
 ```bash
-npm update -g cairnquest
+npm update -g cairn
 ```
 
 Updates only affect the CLI and agent skills. Your workspace files are never touched.
@@ -178,7 +171,7 @@ Updates only affect the CLI and agent skills. Your workspace files are never tou
 ## Configuration
 
 Cairn uses sensible defaults:
-- **Workspace:** `~/cairn`
+- **Workspace:** `~/pms`
 - **Agent detection:** Automatic
 - **Files:** Plain markdown with YAML frontmatter
 
@@ -207,7 +200,7 @@ cairn onboard --force     # Re-run onboarding
 
 ```bash
 cairn doctor              # Auto-fix common issues
-cairn init --path ~/cairn   # Recreate structure
+cairn init --path ~/pms   # Recreate structure
 ```
 
 ### Skill not updating
@@ -219,7 +212,7 @@ cairn update-skill        # Refresh agent skill
 ## Development
 
 ```bash
-git clone https://github.com/gregoryehill/cairn.git
+git clone https://github.com/gregoryehill/cairn-cli.git
 cd cairn-cli
 bun install
 bun link                  # Test locally
@@ -241,7 +234,7 @@ MIT © Gregory Hill
 ## Links
 
 - **GitHub:** https://github.com/gregoryehill/cairn-cli
-- **npm:** https://www.npmjs.com/package/cairnquest
+- **npm:** https://www.npmjs.com/package/cairn
 
 ---
 
