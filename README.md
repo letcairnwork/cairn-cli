@@ -35,7 +35,7 @@ bun install -g cairnquest
 ### Test Locally
 
 ```bash
-git clone https://github.com/gregoryehill/cairn.git
+git clone https://github.com/gregoryehill/cairn-cli.git
 cd cairn-cli
 bun install
 bun link
@@ -76,8 +76,7 @@ cairn create path "Backend API" --quest launch-my-app
 # Create a step
 cairn create step "Set up database" \\
   --quest launch-my-app \\
-  --path backend-api \\
-  --assignee me
+  --path backend-api
 ```
 
 ### `cairn doctor`
@@ -95,6 +94,14 @@ Update agent skill documentation.
 ```bash
 cairn update-skill              # Update all detected agents
 cairn update-skill --agent cursor  # Specific agent
+```
+
+### `cairn update`
+
+Check for and install CLI updates.
+
+```bash
+cairn update  # Check npm for latest version and prompt to upgrade
 ```
 
 ## Supported Agents
@@ -156,10 +163,17 @@ Agent: *creates quest with paths for backend, frontend, deployment*
 ## Updates
 
 ```bash
+cairn update
+```
+
+Checks npm for the latest version and prompts to upgrade.
+
+Or update manually:
+```bash
 npm update -g cairnquest
 ```
 
-Updates the CLI and agent skills. Your workspace files are never touched.
+Updates only affect the CLI and agent skills. Your workspace files are never touched.
 
 ## Configuration
 
@@ -179,14 +193,6 @@ export CAIRN_WORKSPACE=/custom/path
 2. **Files > Databases** - Text files are portable and future-proof
 3. **Simple Beats Complete** - Start simple, add complexity when needed
 4. **AI-First** - Designed for human-AI collaboration
-
-## Examples
-
-See [docs/examples](docs/examples/) for:
-- Sample quests
-- Real workflows
-- Best practices
-- Common patterns
 
 ## Troubleshooting
 
@@ -226,7 +232,7 @@ bun test
 
 ## Contributing
 
-Contributions welcome! See [CONTRIBUTING.md](CONTRIBUTING.md).
+Contributions welcome! Open an issue or PR on GitHub.
 
 ## License
 
@@ -234,10 +240,8 @@ MIT © Gregory Hill
 
 ## Links
 
-- **Website:** https://cairn.app
-- **Docs:** https://docs.cairn.app
-- **GitHub:** https://github.com/gregoryehill/cairn
-- **Discord:** https://discord.com/invite/cairn
+- **GitHub:** https://github.com/gregoryehill/cairn-cli
+- **npm:** https://www.npmjs.com/package/cairnquest
 
 ---
 

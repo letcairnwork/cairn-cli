@@ -23,6 +23,7 @@ import init from '../lib/commands/init.js';
 import create from '../lib/commands/create.js';
 import doctor from '../lib/commands/doctor.js';
 import updateSkill from '../lib/commands/update-skill.js';
+import update from '../lib/commands/update.js';
 
 // Onboard command - full setup with agent detection
 program
@@ -65,6 +66,12 @@ program
   .description('Update agent skill documentation')
   .option('--agent <type>', 'Specific agent to update')
   .action(updateSkill);
+
+// Update command - check for and install updates
+program
+  .command('update')
+  .description('Check for and install Cairn CLI updates')
+  .action(update);
 
 // Parse and handle errors
 program.parseAsync(process.argv).catch((error) => {
