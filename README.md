@@ -5,7 +5,7 @@ AI-native project management where markdown files are the source of truth.
 ## Quick Start
 
 ```bash
-npm install -g cairn
+npm install -g cairn-work
 cairn onboard
 ```
 
@@ -27,9 +27,9 @@ Cairn is a project management system designed for working with AI agents. Instea
 ### Global Install (Recommended)
 
 ```bash
-npm install -g cairn
+npm install -g cairn-work
 # or
-bun install -g cairn
+bun install -g cairn-work
 ```
 
 ### Test Locally
