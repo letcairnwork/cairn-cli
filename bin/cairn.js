@@ -26,6 +26,7 @@ import log from '../lib/commands/log.js';
 import doctor from '../lib/commands/doctor.js';
 import updateSkill from '../lib/commands/update-skill.js';
 import update from '../lib/commands/update.js';
+import upgrade from '../lib/commands/upgrade.js';
 
 // Onboard command - workspace setup with context files
 program
@@ -78,6 +79,19 @@ program
   .option('--project <slug>', 'Project to search for the task')
   .action(log);
 
+// Update command - update task properties (artifacts, etc.)
+program
+  .command('update <task-slug>')
+  .description('Update task properties (artifacts, etc.)')
+  .option('--add-artifact <path>', 'Add an artifact to the task (repeatable)', (value, previous) => {
+    return previous ? previous.concat([value]) : [value];
+  })
+  .option('--remove-artifact <path>', 'Remove an artifact from the task (repeatable)', (value, previous) => {
+    return previous ? previous.concat([value]) : [value];
+  })
+  .option('--project <slug>', 'Project to search for the task')
+  .action(update);
+
 // Doctor command - check workspace health
 program
   .command('doctor')
@@ -90,11 +104,11 @@ program
   .description('Refresh workspace context files (CLAUDE.md + .cairn/planning.md)')
   .action(updateSkill);
 
-// Update command - check for and install updates
+// Upgrade command - check for and install CLI updates
 program
-  .command('update')
+  .command('upgrade')
   .description('Check for and install Cairn CLI updates')
-  .action(update);
+  .action(upgrade);
 
 // Parse and handle errors
 program.parseAsync(process.argv).catch((error) => {
