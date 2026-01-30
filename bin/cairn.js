@@ -25,12 +25,12 @@ import doctor from '../lib/commands/doctor.js';
 import updateSkill from '../lib/commands/update-skill.js';
 import update from '../lib/commands/update.js';
 
-// Onboard command - full setup with agent detection
+// Onboard command - workspace setup with context files
 program
   .command('onboard')
-  .description('Set up Cairn and configure your AI agent')
+  .description('Set up Cairn workspace and agent context')
   .option('--force', 'Force re-onboarding even if already set up')
-  .option('--agent <type>', 'Specify agent type (clawdbot|claude-code|cursor|generic)')
+  .option('--agent <type>', 'Ignored (kept for backwards compatibility)')
   .option('--path <path>', 'Custom workspace path')
   .action(onboard);
 
@@ -61,11 +61,10 @@ program
   .description('Check workspace health and fix issues')
   .action(doctor);
 
-// Update-skill command - refresh agent skill
+// Update-skill command - refresh workspace context
 program
   .command('update-skill')
-  .description('Update agent skill documentation')
-  .option('--agent <type>', 'Specific agent to update')
+  .description('Refresh workspace context files (CLAUDE.md + .cairn/planning.md)')
   .action(updateSkill);
 
 // Update command - check for and install updates

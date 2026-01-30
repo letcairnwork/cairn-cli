@@ -1,358 +1,161 @@
-# Cairn: Agent Skill
+# Cairn Project Management
 
-You are working within Cairn, an AI-native project management platform. Cairn is the source of truth where you and your human coordinate on projects and tasks. Your work lives in markdown files at `{{WORKSPACE_PATH}}`.
+Workspace: `{{WORKSPACE_PATH}}`
 
-Cairn is the platform, not an agent. You are the agent.
+Read `.cairn/planning.md` before creating any projects.
 
-## Your Identity
-
-Detect your agent name from your environment for task assignments:
-- **Clawdbot**: Read `IDENTITY.md` or `USER.md` in workspace, or use the configured user identity
-- **Other agents**: Use `$USER` environment variable, git config user.name, or ask your human
-
-Use this identity when:
-- Assigning yourself to tasks (`assignee: <your-name>`)
-- Logging work (`[<your-name>]` in log entries)
-- Creating new tasks with default assignee
-
-## How Cairn Works
-
-- **Projects** = What you're trying to achieve (charter.md)
-- **Tasks** = Atomic work assigned to you or your human (task-name.md in tasks/ folder)
-- **Inbox** = Raw inputs to triage
-
-Files are the source of truth. You read and write markdown directly.
-
-## Your Workflow
-
-### Starting a Session
-
-1. Check for tasks assigned to you:
-   ```
-   Find all task files where assignee = {your-name} AND status IN (pending, active)
-   ```
-
-2. Prioritize by:
-   - Overdue first
-   - Due today (by project priority 1→2→3)
-   - Due this week (by project priority)
-   - No due date (by project priority)
-
-3. Check `{{WORKSPACE_PATH}}/inbox/` for unprocessed items
-
-### Picking Up a Task
-
-1. Read the task file
-2. Read the parent project's `charter.md`
-3. Check the `autonomy` field (or inherit from project → default `draft`)
-
-### Autonomy Levels
-
-| Level | What to do |
-|-------|------------|
-| `propose` | Log your approach, set status to `review`, assign to human. Wait for approval. |
-| `draft` | Do the work, create artifacts, set status to `review`, assign to human. Don't take irreversible actions. |
-| `execute` | Do everything including final actions. Log completion, set status to `completed`. |
-
-### Writing Log Entries
-
-Always append to the `## Work Log` section. Format:
-
-```
-### YYYY-MM-DD - Description
-[Your-name] What you did
-```
-
-For handoffs to human, use arrow notation:
-
-```
-### YYYY-MM-DD - Blocked on {reason}
-[Your-name] → {human}: Context about what you need
-```
-
-### Status Transitions
-
-| From | To | When |
-|------|----|------|
-| `pending` | `active` | You start working |
-| `active` | `review` | Work complete, needs human approval |
-| `active` | `blocked` | You need human input to continue |
-| `active` | `completed` | Work complete (execute autonomy only) |
-| `review` | `active` | Human gives feedback, more work needed |
-| `review` | `completed` | Human approves |
-| `blocked` | `active` | Human provides input |
-
-### Blocker Workflow (CRITICAL)
-
-**When you hit a blocker, update the file BEFORE asking questions.**
-
-This is not optional. Wrong status = miscommunication. The human monitors task status to know what needs attention. If a task shows `active` but you're actually blocked, they think you're making progress.
-
-**The sequence:**
-
-1. **Hit a blocker** (need info, access, decision, etc.)
-2. **IMMEDIATELY edit the task file:**
-   - Change `status: active` → `status: blocked`
-   - Add `blocker: [what you're blocked on]` to frontmatter
-3. **Verify the edit worked** (`grep "status: blocked" file.md`)
-4. **Log the blocker** in the Work Log section
-5. **THEN ask your blocking question**
-
-**Example:**
-
-```bash
-# 1. Hit blocker - need API credentials
-
-# 2. Edit file IMMEDIATELY
-edit(path="{{WORKSPACE_PATH}}/projects/launch-app/tasks/setup-api.md",
-     oldText="status: active",
-     newText="status: blocked\nblocker: Need Twitter API credentials")
-
-# 3. Verify
-grep "status: blocked" {{WORKSPACE_PATH}}/projects/launch-app/tasks/setup-api.md
-
-# 4. Log it (in same edit or separate)
-# Add to Work Log section:
-### 2026-01-29 - Blocked on API credentials
-[pagoda] → Gregory: Need Twitter API credentials to continue setup
-
-# 5. NOW ask the question
-"I need Twitter API credentials to continue. Where can I find them?"
-```
-
-### Creating Artifacts
-
-When you complete significant work:
-
-1. Save artifacts (code, docs, designs, etc.)
-2. Add to frontmatter `artifacts:` array:
-   ```yaml
-   artifacts:
-     - description: "API integration code"
-       path: "./api-client.ts"
-       created: "2026-01-29"
-   ```
-3. Log the artifact in Work Log
-
-### Completing Tasks
-
-When task is done:
-
-1. Set status to `completed`
-2. Add completion log entry
-3. Update `spend` if applicable
-4. Move completed tasks to `tasks/completed/` (optional, system may do this)
-
-## File Structure
+## Structure
 
 ```
 {{WORKSPACE_PATH}}/
-  projects/
-    {project-slug}/
-      charter.md              # Project overview
-      tasks/
-        {task-slug}.md        # Individual task
-        another-task.md
-        completed/            # Archived completed tasks (optional)
-  inbox/                      # Unprocessed inputs
-  _drafts/                    # WIP documents
-  _conflicts/                 # Sync conflicts (multi-device)
-  _abandoned/                 # Abandoned work
+  projects/{slug}/charter.md        # Project definition
+  projects/{slug}/tasks/{slug}.md   # Individual tasks
+  inbox/                            # Unprocessed inputs
+  _drafts/                          # Work in progress
 ```
 
-## Cairn CLI Helper
+## CLI Commands
 
-**CRITICAL: ALWAYS use the Cairn CLI helper to create projects and tasks. NEVER create entity files manually.**
-
-The CLI ensures proper structure, slugification, and frontmatter.
-
-### Create Task
+Always use the CLI to create entities (never create files manually):
 
 ```bash
-{{WORKSPACE_ROOT}}/cairn-cli/bin/cairn.js create task "Task Title" --project <project-slug> [options]
+cairn create project "Name" --description "..." --objective "..." --criteria "..." --context "..." --due YYYY-MM-DD
+cairn create task "Name" --project <slug> --description "..." --objective "..." --assignee <name> --due YYYY-MM-DD
+cairn doctor        # Check workspace health
+cairn update-skill  # Refresh this file
 ```
 
-Options:
-- `--project <slug>` - Project slug (REQUIRED)
-- `--assignee <name>` - Who's responsible (default: human)
-- `--description "text"` - Task description
-- `--objective "text"` - What needs to be accomplished
-- `--status <status>` - Initial status (default: pending)
-- `--due YYYY-MM-DD` - Due date
+Tasks are created with `status: pending` by default. Do NOT pass `--status` unless the user explicitly asks you to begin work immediately (in which case use `--status next_up`).
 
-**IMPORTANT:** Always pass `--description` and `--objective` with real content. If you omit them, the file will have empty sections. Write specific, actionable text — never placeholder text like "[Describe what needs to be accomplished]".
+Always pass `--description`, `--objective`, `--criteria`, and `--context` with real content. Never leave placeholders.
 
-Example:
-```bash
-cairn create task "Set up CI pipeline" \\
-  --project launch-app \\
-  --assignee pagoda \\
-  --description "Configure GitHub Actions for automated testing" \\
-  --objective "Set up a CI pipeline that runs lint, typecheck, and tests on every PR. Use GitHub Actions with a Node.js matrix for v18 and v20. Cache node_modules for faster runs." \\
-  --due 2026-02-01
+## File Format
+
+**Charter frontmatter:**
+```yaml
+title, description, status (in_progress|paused|completed), priority (1-3),
+created, due, owner, default_autonomy (propose|draft|execute), budget, spent
 ```
 
-### Create Project
-
-```bash
-{{WORKSPACE_ROOT}}/cairn-cli/bin/cairn.js create project "Project Title" [options]
+**Task frontmatter:**
+```yaml
+title, description, assignee, status (pending|next_up|in_progress|review|completed|blocked),
+created, due, autonomy (propose|draft|execute), spend, artifacts, blocker
 ```
 
-Options:
-- `--description "text"` - Project description
-- `--objective "text"` - Why this matters
-- `--criteria "text"` - Success criteria
-- `--context "text"` - Background, constraints, or dependencies
-- `--due YYYY-MM-DD` - Project deadline
-- `--assignee <name>` - Project owner
+**Body sections:** `## Objective`, `## Why This Matters`, `## Success Criteria`, `## Context`, `## Work Log`
 
-**IMPORTANT:** Always pass `--description`, `--objective`, `--criteria`, and `--context` with real content. Write thoughtful, specific text for each — these sections drive the entire project. After creating the project, read the charter and fill in anything that still needs detail.
+## Valid Statuses
 
-Example:
-```bash
-cairn create project "Launch Mobile App" \\
-  --description "Ship iOS and Android app by Q2" \\
-  --objective "We need a mobile app to reach users who primarily use phones. The web app has 60% mobile traffic but poor mobile UX." \\
-  --criteria "App published to App Store and Play Store. Supports login, dashboard, and notifications. 4+ star rating in first month." \\
-  --context "Using React Native for cross-platform. Backend API already exists. Design mockups in Figma." \\
-  --due 2026-06-30
+Tasks: `inbox`, `pending`, `next_up`, `in_progress`, `review`, `completed`, `blocked`
+
+There is NO `active` status. Never use `active` — use `in_progress` when working, `next_up` for queued work.
+
+- **pending** — Default. Task exists but is not ready to start yet.
+- **next_up** — Queued and ready to be picked up.
+- **in_progress** — Currently being worked on.
+- **review** — Work complete, waiting for human approval.
+- **blocked** — Cannot proceed, needs human input.
+- **completed** — Done.
+
+## Working on Tasks
+
+Task files are a shared kanban board between you and the human. Status is how you communicate progress. The human sees the board and knows exactly where everything stands. You are accountable for keeping it accurate.
+
+### Picking up a task
+
+When the human asks you to work on a task (e.g. "work on task X", "start the API integration"):
+
+1. **Read the task file** — understand the objective
+2. **Read the parent charter** — understand the project context and autonomy level
+3. **Set status to `in_progress`** — do this BEFORE you start any work
+4. **Log it** — add a Work Log entry: `[name] Starting work on this task`
+
+### While working
+
+As you work, keep the task file updated:
+- **Log significant progress** in the Work Log section
+- **Add artifacts** to the frontmatter as you create them (code files, docs, configs)
+
+### Finishing a task
+
+When you're done working, your next status depends on **autonomy**:
+
+- **`propose` or `draft` autonomy** → set status to **`review`**. The human decides if it's complete.
+- **`execute` autonomy** → set status to **`completed`**. You have full authority.
+
+Always add a completion log entry describing what you did and what the human should look at.
+
+### When you get stuck
+
+If you hit a blocker (need info, access, a decision, clarification):
+
+1. **Set status to `blocked`** and add `blocker: [reason]` to frontmatter — do this FIRST
+2. **Log it** — `[name] → human: What you need`
+3. **Then ask your question**
+
+Never leave a task as `in_progress` while you're actually waiting on the human. Wrong status = the human thinks you're making progress when you're not.
+
+### Multiple tasks
+
+If the human asks you to work through several tasks in sequence:
+- Move each task to `in_progress` as you start it
+- Move it to the correct finish status (`review` or `completed`) before starting the next one
+- Don't leave multiple tasks as `in_progress` simultaneously unless you're genuinely working on them in parallel
+
+### Task you didn't create
+
+The human may move tasks to `in_progress` or `next_up` from the kanban board and then ask you to pick them up. Always read the task file and charter before starting — don't assume you know what's needed.
+
+## Status Transitions
+
+| From | To | When |
+|------|----|------|
+| pending | next_up | Task is ready to be worked on |
+| next_up | in_progress | You start working |
+| in_progress | review | Work done, needs human approval (draft/propose autonomy) |
+| in_progress | blocked | You need human input |
+| in_progress | completed | Done (execute autonomy ONLY) |
+| review | in_progress | Human gives feedback, more work needed |
+| review | completed | Human approves |
+| blocked | in_progress | Human provides input |
+
+## Autonomy Levels (CRITICAL — always respect these)
+
+Check the task's `autonomy` field (or inherit from parent project's `default_autonomy`). This controls what you may do and what status you set when finished:
+
+| Level | What you do | Final status |
+|-------|-------------|-------------|
+| **propose** | Log your planned approach. Do NOT do the work. | → `review` |
+| **draft** | Do the work and create artifacts. Do NOT take irreversible actions (deploy, publish, send, delete). | → `review` |
+| **execute** | Do everything including irreversible actions. | → `completed` |
+
+**You MUST follow autonomy.** If autonomy is `draft`, you cannot set status to `completed` — you MUST set it to `review` and let the human approve. Only `execute` autonomy permits moving directly to `completed`.
+
+## Work Log Format
+
+```markdown
+### YYYY-MM-DD - Description
+[your-name] What you did
+
+### YYYY-MM-DD - Blocked on {reason}
+[your-name] → human: What you need
 ```
+
+## Identity
+
+Detect your name from environment (`$USER`, git config, or ask). Use it for:
+- `assignee:` in task frontmatter
+- `[name]` in work log entries
 
 ## Operating Principles
 
-1. **Always check status before starting work** - Don't start tasks already in progress
-2. **Update status when blocked IMMEDIATELY** - Don't let human think you're making progress when you're stuck
-3. **Log all significant work** - Future-you (or another agent) will need context
-4. **Never auto-create projects** - Always propose new projects to human first
-5. **Use CLI for entity creation** - Don't hand-craft YAML
-
-### When To Propose Projects
-
-- Notice something untracked → "Should this be a project?"
-- Gap in coverage → "You have projects for X and Y, but nothing for Z"
-- Task complete → "What's next for this project?"
-
-Example:
-```
-I noticed you've been working on API docs in several tasks. 
-Should we create a project for "Documentation Infrastructure"?
-```
-
-## Reading Task Files
-
-Use efficient tools:
-
-```bash
-# Find all tasks for a project
-ls -1 {{WORKSPACE_PATH}}/projects/launch-app/tasks/*.md
-
-# Find your assigned tasks
-rg "^assignee: pagoda" {{WORKSPACE_PATH}}/projects/*/tasks/*.md
-
-# Check task status
-grep "^status:" {{WORKSPACE_PATH}}/projects/launch-app/tasks/setup-api.md
-
-# Read task frontmatter (first 20 lines usually enough)
-head -20 {{WORKSPACE_PATH}}/projects/launch-app/tasks/setup-api.md
-
-# Search task descriptions
-rg "^description:" {{WORKSPACE_PATH}}/projects/*/tasks/*.md
-
-# Find blocked tasks
-rg "^status: blocked" {{WORKSPACE_PATH}}/projects/*/tasks/*.md
-```
-
-## Project Charters
-
-Charters define project goals, constraints, and success criteria.
-
-**Frontmatter:**
-```yaml
----
-title: Project Name
-description: Brief summary
-status: active | paused | completed
-priority: 1 | 2 | 3  (1 = highest)
-created: YYYY-MM-DD
-due: YYYY-MM-DD
-owner: name
-default_autonomy: draft | propose | execute
-budget: 100  (or "unlimited")
-spent: 0
----
-```
-
-**Budget check:** If project budget ≠ `unlimited` AND spent > 80% of budget, note this in your response to the human.
-
-## Task Files
-
-Tasks are atomic units of work.
-
-**Frontmatter:**
-```yaml
----
-title: Task Name
-description: What this task accomplishes
-assignee: name
-status: pending | active | blocked | review | completed
-created: YYYY-MM-DD
-due: YYYY-MM-DD
-autonomy: draft | propose | execute
-spend: 0
-artifacts: []
-blocker: "Reason (only when status: blocked)"
----
-```
-
-**Body sections:**
-```markdown
-## Objective
-
-What needs to be accomplished and why.
-
-## Work Log
-
-### YYYY-MM-DD - Event
-[Agent/human] Description of work or update
-
-### YYYY-MM-DD - Another event
-[Agent] More details
-```
-
-## Sync Conflicts
-
-If using multi-device sync (Obsidian Sync, Dropbox, etc.), conflicts may appear in `_conflicts/`.
-
-When you see a conflict:
-1. Read both versions
-2. Merge important changes
-3. Write merged version back to original location
-4. Delete conflict file
-
-## Common Mistakes
-
-1. ❌ Creating task files manually (missing proper frontmatter)
-   ✅ Use `cairn create task`
-
-2. ❌ Asking blocking questions while status = active
-   ✅ Edit status to blocked FIRST, then ask
-
-3. ❌ Auto-creating projects without human approval
-   ✅ Propose projects, wait for approval
-
-4. ❌ Forgetting to log work
-   ✅ Add Work Log entry for all significant changes
-
-5. ❌ Not verifying file edits
-   ✅ grep/cat to confirm changes applied
-
-## Integration Notes
-
-- **Clawdbot**: Full integration, skill auto-loads
-- **Claude Code**: Add as workspace context
-- **Cursor**: Reads from .cursor/ or workspace context
-- **Other agents**: Include as system context
-
----
-
-**Remember:** You're a team member, not a tool. Treat the workspace like shared docs between collaborators. Be proactive, communicate clearly, and always keep files updated.
+1. **Status is communication** — the human reads the board to know what needs attention. Keep it accurate at all times.
+2. **Move to `in_progress` when you start** — never work on a task without claiming it first.
+3. **Move to `blocked` IMMEDIATELY when stuck** — never leave it as `in_progress` while waiting for the human.
+4. **Respect autonomy** — `draft`/`propose` → `review`, only `execute` → `completed`.
+5. **Log all significant work** with timestamps so there's a clear trail of what happened.
+6. **Never auto-create projects** — propose to human first.
+7. **Use CLI for entity creation** — don't hand-craft YAML.
+8. **After creating a project**, fill in ALL charter sections with real content.
+9. **Budget check** — if spent > 80% of budget, notify human.

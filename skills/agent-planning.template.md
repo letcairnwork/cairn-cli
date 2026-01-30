@@ -61,7 +61,7 @@ Good:
 Create 3-8 tasks per project. Each task should be:
 - **Atomic**: Completable in one work session
 - **Specific**: Clear what "done" means without reading other tasks
-- **Ordered**: Set the first task to `status: active`, the rest to `pending`
+- **Ordered**: All tasks default to `status: pending`. Only set `--status next_up` if the user asks you to begin work immediately.
 
 Think in phases:
 1. **Setup/Foundation** — Environment, tooling, project scaffolding
@@ -72,7 +72,7 @@ Think in phases:
 cairn create task "Task Name" \
   --project project-slug \
   --description "What this accomplishes in one sentence" \
-  --status active \
+  --status pending \
   --due YYYY-MM-DD
 ```
 
@@ -183,7 +183,7 @@ render on all routes.
 
 When breaking down a project, think about what blocks what:
 
-1. **Foundation tasks come first** — These set up the project, install tools, create the base structure. Set the first one to `status: active`.
+1. **Foundation tasks come first** — These set up the project, install tools, create the base structure. All tasks start as `status: pending` by default.
 
 2. **Core tasks depend on foundation** — These build the actual features. Set to `status: pending` until foundation tasks are done.
 
@@ -275,7 +275,7 @@ Here's what a fully fleshed-out project looks like after an agent processes "Cre
 ---
 title: Build Marketing Website
 description: Design and develop a responsive marketing website with homepage, about, contact, and blog
-status: active
+status: in_progress
 priority: 2
 created: 2026-01-30
 due: 2026-03-01
@@ -325,7 +325,7 @@ Assumptions:
 title: Initialize project and tooling
 description: Scaffold Next.js project with TypeScript, Tailwind, and dev tooling
 assignee: you
-status: active
+status: pending
 created: 2026-01-30
 due: 2026-02-03
 autonomy: draft
@@ -503,7 +503,7 @@ Chrome, Safari, and Firefox latest versions.
 ---
 title: Add Dark Mode
 description: Implement system-aware dark mode with manual toggle across the site
-status: active
+status: in_progress
 priority: 2
 created: 2026-01-30
 due: 2026-02-10
@@ -547,7 +547,7 @@ Use `next-themes` or a lightweight custom hook.
 title: Implement theme system
 description: Add dark mode infrastructure with Tailwind class strategy and theme provider
 assignee: you
-status: active
+status: pending
 created: 2026-01-30
 due: 2026-02-04
 autonomy: draft
@@ -654,7 +654,7 @@ in both modes.
 
 4. **Vague tasks** — "Work on the frontend" is not a task. "Build the homepage with hero section, features grid, and CTA" is a task.
 
-5. **No sequencing** — All tasks set to `active` at once. Set only the first task (or first parallel set) to `active`, rest to `pending`.
+5. **No sequencing** — All tasks created with random statuses. Create all tasks as `pending` by default. Only use `next_up` when the user explicitly asks you to begin work.
 
 6. **Ignoring the charter** — Jumping straight to tasks without filling in Why, Success Criteria, and Context. The charter is how the human verifies you understood their intent.
 
