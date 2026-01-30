@@ -1,4 +1,4 @@
-# Cairn 🏔️
+# Cairn 🦮
 
 AI-native project management where markdown files are the source of truth.
 

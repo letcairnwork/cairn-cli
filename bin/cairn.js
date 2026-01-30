@@ -14,7 +14,7 @@ const program = new Command();
 
 program
   .name('cairn')
-  .description('🏔️  AI-native project management')
+  .description('🦮  AI-native project management')
   .version(packageJson.version);
 
 // Import commands
