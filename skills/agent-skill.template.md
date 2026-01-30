@@ -14,6 +14,44 @@ Read `.cairn/planning.md` before creating any projects.
   _drafts/                          # Work in progress
 ```
 
+## Choosing the Right Project
+
+When creating a new task, consider which project it belongs to:
+
+### Meta-Work Rule
+**Tasks that improve Cairn itself** → `launch-cairn` project
+- CLI features or bug fixes
+- Documentation improvements
+- Web app UX enhancements
+- System architecture changes
+- Any work that results in a PR to the Cairn repo
+
+### Operations Rule
+**Tasks about the agent's personal workflows** → `{agent-name}-operations` project
+- Memory management systems
+- Daily routines and automation
+- Agent self-improvement
+- Personal tools and scripts
+
+### External Deliverables Rule
+**Tasks producing external deliverables** → specific project for that work
+- Client projects
+- Content creation
+- Product features
+- Research projects
+
+### Examples
+
+| Task | Correct Project | Why |
+|------|----------------|-----|
+| "Add `cairn log` command" | `launch-cairn` | CLI feature → improves Cairn itself |
+| "Fix mobile kanban UX" | `launch-cairn` | Web app improvement → Cairn feature |
+| "Set up daily standup routine" | `pagoda-operations` | Personal workflow → agent operations |
+| "Write blog post on AI tools" | `content-creation` | External deliverable → specific project |
+| "Improve CLAUDE.md documentation" | `launch-cairn` | Cairn documentation → meta-work |
+
+**When in doubt:** If it results in a PR to the Cairn repo, it belongs in `launch-cairn`.
+
 ## CLI Commands
 
 Always use the CLI to create entities (never create files manually):
@@ -131,6 +169,66 @@ Check the task's `autonomy` field (or inherit from parent project's `default_aut
 | **execute** | Do everything including irreversible actions. | → `completed` |
 
 **You MUST follow autonomy.** If autonomy is `draft`, you cannot set status to `completed` — you MUST set it to `review` and let the human approve. Only `execute` autonomy permits moving directly to `completed`.
+
+## Budget and Spend Tracking
+
+Projects have a `budget` and tasks track `spend` against it. These use **abstract units** representing effort/cost.
+
+### Understanding Spend Units
+
+**Scale:** 1 spend unit = ~$0.10 USD in LLM costs OR ~10 minutes of human-equivalent work
+
+Use this to estimate total project cost before starting and track actual spend as you work.
+
+### What Counts as Spend
+
+✅ **DO count:**
+- LLM API costs (use `$cost * 10` to convert to spend units)
+- Significant planning or research time
+- Code generation, debugging, testing
+- Writing documentation or specifications
+- Design and architecture work
+
+❌ **DON'T count:**
+- Reading existing documentation (that's free research)
+- Failed attempts that taught you something (that's learning)
+- Quick clarifications or small fixes (< 5 minutes)
+- Background processing or waiting time
+
+### When to Update Spend
+
+Update the `spend` field in task frontmatter:
+- After completing significant work (don't wait until the end)
+- When switching to another task
+- Before setting status to `review` or `completed`
+- When you realize you've burned more budget than expected
+
+### Budget Alerts
+
+**If task spend > 80% of implied budget** (project budget / # of tasks):
+1. Add a work log entry explaining why it's taking longer
+2. Consider breaking the task into smaller pieces
+3. Ask the human if scope has grown or if more budget is needed
+
+**Example:**
+```yaml
+# Project charter
+budget: 100      # ~$10 USD or ~16 hours of work
+spent: 45        # ~$4.50 spent so far across all tasks
+
+# Task
+spend: 25        # ~$2.50 spent on this specific task
+```
+
+### Estimating Spend
+
+Before starting a task, estimate its spend:
+- Simple bug fix: 1-5 units
+- New feature (small): 10-20 units
+- Complex refactor: 30-50 units
+- Large feature: 50-100 units
+
+If actual spend exceeds estimate by >50%, document why in the work log.
 
 ## Work Log Format
 
