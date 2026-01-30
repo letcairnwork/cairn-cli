@@ -1,6 +1,6 @@
 {
   "name": "cairn-work",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "AI-native project management - work with AI agents using markdown files",
   "type": "module",
   "bin": {
