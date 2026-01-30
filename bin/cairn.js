@@ -51,6 +51,8 @@ program
   .option('--due <date>', 'Due date (YYYY-MM-DD)')
   .option('--description <text>', 'Short description')
   .option('--objective <text>', 'Detailed objective')
+  .option('--criteria <text>', 'Success criteria (projects only)')
+  .option('--context <text>', 'Background context (projects only)')
   .action(create);
 
 // Doctor command - check workspace health

@@ -175,10 +175,12 @@ The CLI ensures proper structure, slugification, and frontmatter.
 Options:
 - `--project <slug>` - Project slug (REQUIRED)
 - `--assignee <name>` - Who's responsible (default: human)
-- `--description "text"` - Task description  
+- `--description "text"` - Task description
 - `--objective "text"` - What needs to be accomplished
 - `--status <status>` - Initial status (default: pending)
 - `--due YYYY-MM-DD` - Due date
+
+**IMPORTANT:** Always pass `--description` and `--objective` with real content. If you omit them, the file will have empty sections. Write specific, actionable text — never placeholder text like "[Describe what needs to be accomplished]".
 
 Example:
 ```bash
@@ -186,6 +188,7 @@ cairn create task "Set up CI pipeline" \\
   --project launch-app \\
   --assignee pagoda \\
   --description "Configure GitHub Actions for automated testing" \\
+  --objective "Set up a CI pipeline that runs lint, typecheck, and tests on every PR. Use GitHub Actions with a Node.js matrix for v18 and v20. Cache node_modules for faster runs." \\
   --due 2026-02-01
 ```
 
@@ -198,13 +201,20 @@ cairn create task "Set up CI pipeline" \\
 Options:
 - `--description "text"` - Project description
 - `--objective "text"` - Why this matters
+- `--criteria "text"` - Success criteria
+- `--context "text"` - Background, constraints, or dependencies
 - `--due YYYY-MM-DD` - Project deadline
 - `--assignee <name>` - Project owner
+
+**IMPORTANT:** Always pass `--description`, `--objective`, `--criteria`, and `--context` with real content. Write thoughtful, specific text for each — these sections drive the entire project. After creating the project, read the charter and fill in anything that still needs detail.
 
 Example:
 ```bash
 cairn create project "Launch Mobile App" \\
   --description "Ship iOS and Android app by Q2" \\
+  --objective "We need a mobile app to reach users who primarily use phones. The web app has 60% mobile traffic but poor mobile UX." \\
+  --criteria "App published to App Store and Play Store. Supports login, dashboard, and notifications. 4+ star rating in first month." \\
+  --context "Using React Native for cross-platform. Backend API already exists. Design mockups in Figma." \\
   --due 2026-06-30
 ```
 
