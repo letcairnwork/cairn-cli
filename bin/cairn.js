@@ -22,6 +22,7 @@ import onboard from '../lib/commands/onboard.js';
 import init from '../lib/commands/init.js';
 import create from '../lib/commands/create.js';
 import list from '../lib/commands/list.js';
+import log from '../lib/commands/log.js';
 import doctor from '../lib/commands/doctor.js';
 import updateSkill from '../lib/commands/update-skill.js';
 import update from '../lib/commands/update.js';
@@ -68,6 +69,14 @@ program
   .option('--overdue', 'Show only overdue tasks')
   .option('--format <format>', 'Output format (table|json)', 'table')
   .action(list);
+
+// Log command - add work log entries to tasks
+program
+  .command('log <task-slug> <message>')
+  .description('Add a work log entry to a task')
+  .option('--title <text>', 'Custom log entry title (default: "Update")')
+  .option('--project <slug>', 'Project to search for the task')
+  .action(log);
 
 // Doctor command - check workspace health
 program
