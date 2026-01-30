@@ -1,83 +1,97 @@
-# Cairn 🦮
+# Cairn
 
-AI-native project management where markdown files are the source of truth.
+Project management for AI agents. Markdown files are the source of truth.
 
-## Quick Start
+## Setup
 
 ```bash
 npm install -g cairn-work
 cairn onboard
 ```
 
-That's it! Cairn will detect your AI agent (Clawdbot, Claude Code, Cursor, etc.) and configure everything automatically.
+This creates a workspace and writes two context files your agent reads automatically:
 
-## What is Cairn?
+- **`CLAUDE.md`** — Compact reference for day-to-day operations (statuses, CLI commands, autonomy rules)
+- **`.cairn/planning.md`** — Full guide for creating projects and tasks with real content
 
-Cairn is a project management system designed for working with AI agents. Instead of databases and web UIs, Cairn uses simple markdown files that both you and your AI agent can read and edit.
+No agent-specific configuration. Any AI agent that can read files is ready to go.
 
-**Key features:**
-- **Files are the source of truth** - No database, just markdown
-- **AI-native** - Designed for AI agents to understand and work with
-- **Agent detection** - Auto-configures for Clawdbot, Claude Code, Cursor, Windsurf
-- **Simple hierarchy** - Projects → Tasks
-- **Status tracking** - pending, active, review, blocked, completed
+## How it works
 
-## Installation
+You and your AI agent share a folder of markdown files. Projects have charters. Tasks have objectives. Status fields track where everything stands — like a kanban board backed by text files.
 
-### Global Install (Recommended)
-
-```bash
-npm install -g cairn-work
-# or
-bun install -g cairn-work
+```
+~/cairn/
+  CLAUDE.md                        # Agent context (auto-generated)
+  .cairn/planning.md               # Planning guide (auto-generated)
+  projects/
+    launch-app/
+      charter.md                   # Why, success criteria, context
+      tasks/
+        setup-database.md          # Individual task
+        build-api.md
+        deploy.md
+  inbox/                           # Ideas to triage
 ```
 
-### Test Locally
+### The workflow
 
-```bash
-git clone https://github.com/gregoryehill/cairn-cli.git
-cd cairn-cli
-bun install
-bun link
-```
+1. **You create a project** — tell your agent what you want to build. It creates the project and tasks using `cairn create`, fills in real content (not placeholders), and sets everything to `pending`.
+
+2. **You manage the board** — move tasks to `next_up` or `in_progress` when you're ready to start. Or tell your agent "work on the API task" and it picks it up.
+
+3. **The agent keeps status updated** — when it starts a task, it moves to `in_progress`. When it finishes, it moves to `review` (so you can approve) or `completed` (if you gave it full autonomy). If it gets stuck, it moves to `blocked` and tells you what it needs.
+
+4. **You always know where things stand** — statuses are the shared language. The agent is accountable for keeping them accurate.
+
+### Statuses
+
+`pending` · `next_up` · `in_progress` · `review` · `blocked` · `completed`
+
+### Autonomy
+
+Each task has an autonomy level that controls what the agent can do:
+
+| Level | Agent behavior | Finishes as |
+|-------|---------------|-------------|
+| `propose` | Plans the approach, doesn't do the work | `review` |
+| `draft` | Does the work, no irreversible actions | `review` |
+| `execute` | Does everything, including deploy/publish/send | `completed` |
+
+Default is `draft` — the agent works but you approve before anything ships.
 
 ## Commands
 
 ### `cairn onboard`
 
-Set up Cairn and configure your AI agent automatically.
+Set up workspace and write agent context files.
 
 ```bash
-cairn onboard                    # Auto-detect agent
-cairn onboard --agent clawdbot   # Specific agent
-cairn onboard --force            # Re-run onboarding
-```
-
-### `cairn init`
-
-Initialize workspace without agent configuration.
-
-```bash
-cairn init                # Create workspace in current directory
-cairn init --path /custom # Custom location
+cairn onboard                  # Interactive setup
+cairn onboard --path ./mywork  # Non-interactive, specific path
+cairn onboard --force          # Re-run on existing workspace
 ```
 
 ### `cairn create`
 
-Create projects and tasks.
+Create projects and tasks. Always pass real content — the CLI enforces `--description` and `--objective`.
 
 ```bash
-# Create a project
-cairn create project "Launch My App"
+cairn create project "Launch App" \
+  --description "Ship the MVP by March" \
+  --objective "We need to validate the idea with real users" \
+  --criteria "App live on production, 10 beta signups" \
+  --context "React Native, Supabase backend, deploy to Vercel"
 
-# Create a task
-cairn create task "Set up database" \\
-  --project launch-my-app
+cairn create task "Set up database" \
+  --project launch-app \
+  --description "Configure Supabase tables and RLS policies" \
+  --objective "Database schema matches the data model, RLS prevents cross-tenant access"
 ```
 
 ### `cairn doctor`
 
-Check workspace health and fix issues.
+Check workspace health — verifies folder structure, `CLAUDE.md`, and `.cairn/planning.md` exist.
 
 ```bash
 cairn doctor
@@ -85,157 +99,62 @@ cairn doctor
 
 ### `cairn update-skill`
 
-Update agent skill documentation.
+Refresh `CLAUDE.md` and `.cairn/planning.md` with the latest templates (e.g. after a CLI update).
 
 ```bash
-cairn update-skill              # Update all detected agents
-cairn update-skill --agent cursor  # Specific agent
+cairn update-skill
 ```
 
 ### `cairn update`
 
-Check for and install CLI updates.
-
-```bash
-cairn update  # Check npm for latest version and prompt to upgrade
-```
-
-## Supported Agents
-
-Cairn auto-detects and configures:
-
-- **[Clawdbot](https://clawd.bot)** - Full integration via skills system
-- **Claude Code** - Workspace context integration
-- **Cursor** - .cursorrules integration
-- **Windsurf** - Workspace integration
-- **Generic** - Manual setup instructions for any AI agent
-
-## How It Works
-
-### File Structure
-
-```
-~/cairn/
-  projects/
-    launch-my-app/
-      charter.md           # Project overview
-      tasks/
-        setup-database.md  # Individual task
-        deploy-api.md      # Another task
-  inbox/                   # Incoming ideas
-  _drafts/                 # Work in progress
-```
-
-### Project → Task
-
-**Project** - A goal or initiative (e.g., "Launch My App")
-**Task** - An atomic piece of work (e.g., "Set up database")
-
-### Status Workflow
-
-`pending` → `active` → `review` → `completed`
-
-Or if blocked: `active` → `blocked` → `active`
-
-### Working with AI Agents
-
-After onboarding, your agent understands how to:
-- Create and update projects/tasks
-- Follow status workflows
-- Log work with timestamps
-- Ask for input when blocked
-
-**Example conversation:**
-```
-You: "Help me plan out my app launch"
-Agent: "I'll create a project structure. What's your app called?"
-You: "TaskMaster - a todo app"
-Agent: *creates project with tasks for backend, frontend, deployment*
-```
-
-## Updates
+Check for a new CLI version and install it.
 
 ```bash
 cairn update
 ```
 
-Checks npm for the latest version and prompts to upgrade.
+## File format
 
-Or update manually:
-```bash
-npm update -g cairn
+All files use YAML frontmatter + markdown sections.
+
+**Charter** (`charter.md`):
+```yaml
+---
+title: Launch App
+status: in_progress
+priority: 1
+default_autonomy: draft
+---
+
+## Why This Matters
+## Success Criteria
+## Context
+## Work Log
 ```
 
-Updates only affect the CLI and agent skills. Your workspace files are never touched.
+**Task** (`tasks/setup-database.md`):
+```yaml
+---
+title: Set up database
+assignee: agent-name
+status: pending
+autonomy: draft
+---
 
-## Configuration
-
-Cairn uses sensible defaults:
-- **Workspace:** Current directory or `~/cairn`
-- **Agent detection:** Automatic
-- **Files:** Plain markdown with YAML frontmatter
-
-Override workspace location:
-```bash
-export CAIRN_WORKSPACE=/custom/path
+## Objective
+## Work Log
 ```
 
-## Philosophy
-
-1. **Context is King** - Keep all context in one place
-2. **Files > Databases** - Text files are portable and future-proof
-3. **Simple Beats Complete** - Start simple, add complexity when needed
-4. **AI-First** - Designed for human-AI collaboration
+The agent logs all work in the `## Work Log` section with timestamps and its name.
 
 ## Troubleshooting
 
-### Agent not detected
-
 ```bash
-cairn doctor              # Check setup
-cairn onboard --force     # Re-run onboarding
+cairn doctor              # Diagnose issues
+cairn onboard --force     # Regenerate context files
+cairn update-skill        # Refresh templates after CLI update
 ```
-
-### Workspace issues
-
-```bash
-cairn doctor              # Auto-fix common issues
-cairn init --path ~/cairn  # Recreate structure
-```
-
-### Skill not updating
-
-```bash
-cairn update-skill        # Refresh agent skill
-```
-
-## Development
-
-```bash
-git clone https://github.com/gregoryehill/cairn-cli.git
-cd cairn-cli
-bun install
-bun link                  # Test locally
-```
-
-Run tests:
-```bash
-bun test
-```
-
-## Contributing
-
-Contributions welcome! Open an issue or PR on GitHub.
 
 ## License
 
-MIT © Gregory Hill
-
-## Links
-
-- **GitHub:** https://github.com/gregoryehill/cairn-cli
-- **npm:** https://www.npmjs.com/package/cairn
-
----
-
-Built with ❤️ for AI-human collaboration
+MIT
