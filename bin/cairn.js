@@ -21,6 +21,7 @@ program
 import onboard from '../lib/commands/onboard.js';
 import init from '../lib/commands/init.js';
 import create from '../lib/commands/create.js';
+import list from '../lib/commands/list.js';
 import doctor from '../lib/commands/doctor.js';
 import updateSkill from '../lib/commands/update-skill.js';
 import update from '../lib/commands/update.js';
@@ -54,6 +55,18 @@ program
   .option('--criteria <text>', 'Success criteria (projects only)')
   .option('--context <text>', 'Background context (projects only)')
   .action(create);
+
+// List command - query and filter tasks
+program
+  .command('list <entity>')
+  .description('List tasks with optional filtering')
+  .option('--status <statuses>', 'Filter by status (comma-separated: pending,in_progress,blocked)')
+  .option('--assignee <name>', 'Filter by assignee')
+  .option('--project <slug>', 'Filter by project')
+  .option('--due-before <date>', 'Filter by due date (YYYY-MM-DD)')
+  .option('--overdue', 'Show only overdue tasks')
+  .option('--format <format>', 'Output format (table|json)', 'table')
+  .action(list);
 
 // Doctor command - check workspace health
 program
