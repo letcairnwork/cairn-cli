@@ -27,6 +27,10 @@ import doctor from '../lib/commands/doctor.js';
 import updateSkill from '../lib/commands/update-skill.js';
 import update from '../lib/commands/update.js';
 import upgrade from '../lib/commands/upgrade.js';
+import start from '../lib/commands/start.js';
+import done from '../lib/commands/done.js';
+import block from '../lib/commands/block.js';
+import view from '../lib/commands/view.js';
 
 // Onboard command - workspace setup with context files
 program
@@ -109,6 +113,34 @@ program
   .command('upgrade')
   .description('Check for and install Cairn CLI updates')
   .action(upgrade);
+
+// Start command - mark task as in_progress
+program
+  .command('start <task-slug>')
+  .description('Start working on a task (sets status to in_progress)')
+  .option('--project <slug>', 'Project to search for the task')
+  .action(start);
+
+// Done command - mark task as complete (review or done based on autonomy)
+program
+  .command('done <task-slug>')
+  .description('Mark task as complete (review/done based on autonomy level)')
+  .option('--project <slug>', 'Project to search for the task')
+  .action(done);
+
+// Block command - mark task as blocked with reason
+program
+  .command('block <task-slug> <message>')
+  .description('Mark task as blocked with explanation')
+  .option('--project <slug>', 'Project to search for the task')
+  .action(block);
+
+// View command - show full task details
+program
+  .command('view <task-slug>')
+  .description('View complete task details')
+  .option('--project <slug>', 'Project to search for the task')
+  .action(view);
 
 // Parse and handle errors
 program.parseAsync(process.argv).catch((error) => {
