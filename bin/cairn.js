@@ -63,6 +63,7 @@ program
   .option('--project <slug>', 'Parent project (required for tasks)')
   .option('--assignee <name>', 'Assignee name', 'you')
   .option('--status <status>', 'Initial status', 'pending')
+  .option('--priority <number>', 'Priority level (1=highest, default: 1)', '1')
   .option('--autonomy <level>', 'Autonomy level: propose, draft, or execute (tasks only)', 'draft')
   .option('--due <date>', 'Due date (YYYY-MM-DD)')
   .option('--description <text>', 'Short description')
