@@ -37,6 +37,8 @@ import my from '../lib/commands/my.js';
 import artifact from '../lib/commands/artifact.js';
 import status from '../lib/commands/status.js';
 import note from '../lib/commands/note.js';
+import edit from '../lib/commands/edit.js';
+import search from '../lib/commands/search.js';
 
 // Onboard command - workspace setup with context files
 program
@@ -187,6 +189,20 @@ program
   .command('status')
   .description('Show workspace overview with task counts by status')
   .action(status);
+
+// Edit command - open task in editor
+program
+  .command('edit <task-slug>')
+  .description('Open task in $EDITOR')
+  .option('--project <slug>', 'Project to search for the task')
+  .action(edit);
+
+// Search command - find tasks by keyword
+program
+  .command('search <query>')
+  .description('Search tasks by keyword in title, description, or content')
+  .option('--project <slug>', 'Limit search to specific project')
+  .action(search);
 
 // Parse and handle errors
 program.parseAsync(process.argv).catch((error) => {
