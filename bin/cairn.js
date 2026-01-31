@@ -30,11 +30,13 @@ import upgrade from '../lib/commands/upgrade.js';
 import start from '../lib/commands/start.js';
 import done from '../lib/commands/done.js';
 import block from '../lib/commands/block.js';
+import unblock from '../lib/commands/unblock.js';
 import view from '../lib/commands/view.js';
 import active from '../lib/commands/active.js';
 import my from '../lib/commands/my.js';
 import artifact from '../lib/commands/artifact.js';
 import status from '../lib/commands/status.js';
+import note from '../lib/commands/note.js';
 
 // Onboard command - workspace setup with context files
 program
@@ -138,6 +140,20 @@ program
   .description('Mark task as blocked with explanation')
   .option('--project <slug>', 'Project to search for the task')
   .action(block);
+
+// Unblock command - resume blocked task
+program
+  .command('unblock <task-slug> [message]')
+  .description('Unblock task and resume work (sets status to in_progress)')
+  .option('--project <slug>', 'Project to search for the task')
+  .action(unblock);
+
+// Note command - add quick note to task
+program
+  .command('note <task-slug> <message>')
+  .description('Add a quick note to task work log')
+  .option('--project <slug>', 'Project to search for the task')
+  .action(note);
 
 // View command - show full task details
 program
