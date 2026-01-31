@@ -33,6 +33,7 @@ import block from '../lib/commands/block.js';
 import view from '../lib/commands/view.js';
 import active from '../lib/commands/active.js';
 import my from '../lib/commands/my.js';
+import artifact from '../lib/commands/artifact.js';
 
 // Onboard command - workspace setup with context files
 program
@@ -155,6 +156,14 @@ program
   .command('my')
   .description('Show all tasks assigned to me, grouped by status')
   .action(my);
+
+// Artifact command - create Obsidian artifact and link to task
+program
+  .command('artifact <task-slug> <artifact-name>')
+  .description('Create an Obsidian artifact and link it to a task')
+  .option('--project <slug>', 'Project to search for the task')
+  .option('--open', 'Open the artifact in Obsidian after creation')
+  .action(artifact);
 
 // Parse and handle errors
 program.parseAsync(process.argv).catch((error) => {
