@@ -39,6 +39,7 @@ import status from '../lib/commands/status.js';
 import note from '../lib/commands/note.js';
 import edit from '../lib/commands/edit.js';
 import search from '../lib/commands/search.js';
+import triage from '../lib/commands/triage.js';
 
 // Onboard command - workspace setup with context files
 program
@@ -204,6 +205,13 @@ program
   .description('Search tasks by keyword in title, description, or content')
   .option('--project <slug>', 'Limit search to specific project')
   .action(search);
+
+// Triage command - process inbox items interactively
+program
+  .command('triage')
+  .description('Process inbox items interactively - create tasks, delete, or skip')
+  .option('--assignee <name>', 'Default assignee for created tasks', 'you')
+  .action(triage);
 
 // Parse and handle errors
 program.parseAsync(process.argv).catch((error) => {
