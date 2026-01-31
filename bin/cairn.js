@@ -64,7 +64,7 @@ program
   .option('--assignee <name>', 'Assignee name', 'you')
   .option('--status <status>', 'Initial status', 'pending')
   .option('--priority <number>', 'Priority level (1=highest, default: 1)', '1')
-  .option('--autonomy <level>', 'Autonomy level: propose, draft, or execute (tasks only)', 'draft')
+  .option('--autonomy <level>', 'Autonomy level: propose, draft, or execute (tasks only)', 'execute')
   .option('--due <date>', 'Due date (YYYY-MM-DD)')
   .option('--description <text>', 'Short description')
   .option('--objective <text>', 'Detailed objective')
