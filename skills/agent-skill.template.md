@@ -54,18 +54,114 @@ When creating a new task, consider which project it belongs to:
 
 ## CLI Commands
 
+### Creating Tasks & Projects
+
 Always use the CLI to create entities (never create files manually):
 
 ```bash
-cairn create project "Name" --description "..." --objective "..." --criteria "..." --context "..." --due YYYY-MM-DD
-cairn create task "Name" --project <slug> --description "..." --objective "..." --assignee <name> --due YYYY-MM-DD
+# Create a project
+cairn create project "Name" --description "..." --objective "..." --criteria "..." --context "..."
+
+# Create a task (defaults: priority=1, due=today for P1, autonomy=execute)
+cairn create task "Name" \
+  --project <slug> \
+  --description "One-line summary" \
+  --objective "What needs to be done and what done looks like"
+
+# Override defaults when needed
+cairn create task "Name" \
+  --project <slug> \
+  --description "..." \
+  --objective "..." \
+  --autonomy draft \  # Use for code changes or proposals
+  --priority 2        # Lower priority = due in 7 days instead of today
+```
+
+**Important defaults:**
+- `priority: 1` (urgent) - due **today**
+- `priority: 2+` (less urgent) - due in **7 days**
+- `autonomy: execute` - task goes to **done** when completed
+- `autonomy: draft` - task goes to **review** when completed (use for code)
+
+Always pass `--description` and `--objective` with real content. Never leave placeholders.
+
+### Working on Tasks
+
+```bash
+# See your current workload
+cairn my              # Show all your tasks grouped by status
+
+# Start a task (pending → in_progress)
+cairn start <task-slug>
+
+# Add quick notes while working
+cairn note <task-slug> "Found OAuth library: passport.js"
+
+# Mark task complete (goes to 'done' or 'review' based on autonomy)
+cairn done <task-slug>
+
+# Block a task (when stuck)
+cairn block <task-slug> "Waiting for API credentials"
+
+# Resume a blocked task
+cairn unblock <task-slug> "Got credentials"
+
+# View full task details
+cairn view <task-slug>
+
+# Edit task manually if needed
+cairn edit <task-slug>    # Opens in $EDITOR
+```
+
+### Finding Tasks
+
+```bash
+cairn my              # Your tasks
+cairn active          # All in-progress tasks (across team)
+cairn status          # Workspace overview with counts
+cairn search "auth"   # Find tasks by keyword
+```
+
+### Other Commands
+
+```bash
 cairn doctor        # Check workspace health
 cairn update-skill  # Refresh this file
 ```
 
-Tasks are created with `status: pending` by default. Do NOT pass `--status` unless the user explicitly asks you to begin work immediately (in which case use `--status next_up`).
+## Understanding Autonomy Levels
 
-Always pass `--description`, `--objective`, `--criteria`, and `--context` with real content. Never leave placeholders.
+Autonomy determines whether your completed work goes to `review` or straight to `done`.
+
+**Default: `execute`** (most tasks)
+- Direct action requests: research, documents, reservations
+- Goes straight to `done` when you finish
+- Use for anything that can be edited or undone easily
+
+**Use `draft` for:**
+- **Code changes** (always need PR review before merge)
+- **Proposals/strategy docs** (human needs to decide)
+- Add `--autonomy draft` when creating the task
+
+**Examples:**
+
+```bash
+# Execute (default) - direct actions
+cairn create task "Get last 20 Super Bowl winners" --project research ...
+# → When done, goes to 'done'
+
+# Draft - code or proposals
+cairn create task "Change button color to blue" \
+  --project my-app \
+  --autonomy draft \
+  ...
+# → When done, goes to 'review'
+```
+
+**When done with a task:**
+- `cairn done <task>` handles autonomy automatically
+- Execute → done
+- Draft → review (you'll get feedback before it's final)
 
 ## File Format
 
@@ -100,39 +196,108 @@ There is NO `active` status. Never use `active` — use `in_progress` when worki
 
 Task files are a shared kanban board between you and the human. Status is how you communicate progress. The human sees the board and knows exactly where everything stands. You are accountable for keeping it accurate.
 
-### Picking up a task
+### When the Human Asks You to Do Something
 
-When the human asks you to work on a task (e.g. "work on task X", "start the API integration"):
+**Important:** When the human gives you a direct action request, you should **create the task AND do the work immediately**.
 
-1. **Read the task file** — understand the objective
-2. **Read the parent charter** — understand the project context and autonomy level
-3. **Set status to `in_progress`** — do this BEFORE you start any work
-4. **Log it** — add a Work Log entry: `[name] Starting work on this task`
+**Example requests:**
+- "Get me a list of the last 20 NFL champions"
+- "Create an agenda for Monday's meeting"
+- "Make a reservation at Husk for 7pm Tuesday"
+- "Change the button color to blue"
+
+**Your workflow:**
+
+1. **Create the task:**
+   ```bash
+   cairn create task "Get last 20 NFL champions" \
+     --project <relevant-project> \
+     --description "Research and list NFL champions" \
+     --objective "Provide a complete list..."
+   # Use --autonomy draft for code changes
+   ```
+
+2. **Start it immediately:**
+   ```bash
+   cairn start <task-slug>
+   ```
+
+3. **Do the work** (research, write code, create document, etc.)
+
+4. **Mark it done:**
+   ```bash
+   cairn done <task-slug>
+   # Goes to 'done' (autonomy: execute) or 'review' (autonomy: draft)
+   ```
+
+5. **Deliver the result** to the human
+
+**Don't just create tasks and wait** - if the human asks you to do something, they expect it done unless you're truly blocked.
+
+### Picking up an existing task
+
+When working on a task that already exists:
+
+1. **View the task:**
+   ```bash
+   cairn view <task-slug>
+   ```
+
+2. **Start it:**
+   ```bash
+   cairn start <task-slug>  # Sets status to in_progress
+   ```
+
+3. **Read the objective** - understand what needs to be done
 
 ### While working
 
-As you work, keep the task file updated:
-- **Log significant progress** in the Work Log section
-- **Add artifacts** to the frontmatter as you create them (code files, docs, configs)
+As you work, use `cairn note` for quick progress updates:
+
+```bash
+cairn note <task-slug> "Implemented OAuth flow"
+cairn note <task-slug> "Created PR: https://github.com/..."
+```
+
+Add artifacts (documents, code, etc.) as you create them:
+
+```bash
+cairn update <task-slug> --add-artifact "/path/to/file"
+cairn update <task-slug> --add-artifact "https://github.com/repo/pull/123"
+```
 
 ### Finishing a task
 
-When you're done working, your next status depends on **autonomy**:
+When you're done, use `cairn done`:
 
-- **`propose` or `draft` autonomy** → set status to **`review`**. The human decides if it's complete.
-- **`execute` autonomy** → set status to **`completed`**. You have full authority.
+```bash
+cairn done <task-slug>
+```
 
-Always add a completion log entry describing what you did and what the human should look at.
+This automatically sets the correct status based on autonomy:
+- **`execute` autonomy** → `done` (you have full authority)
+- **`draft` autonomy** → `review` (needs human approval)
+
+The CLI handles this for you - just use `cairn done` when finished.
 
 ### When you get stuck
 
 If you hit a blocker (need info, access, a decision, clarification):
 
-1. **Set status to `blocked`** and add `blocker: [reason]` to frontmatter — do this FIRST
-2. **Log it** — `[name] → human: What you need`
-3. **Then ask your question**
+1. **Try to unblock yourself first** - search docs, check examples, problem-solve
+2. **If truly blocked:**
+   ```bash
+   cairn block <task-slug> "Waiting for API credentials from client"
+   ```
+3. **Then tell the human** what you need
 
-Never leave a task as `in_progress` while you're actually waiting on the human. Wrong status = the human thinks you're making progress when you're not.
+Never leave a task as `in_progress` while you're waiting on the human. Use `cairn block` to communicate blockers clearly.
+
+To resume after unblocking:
+
+```bash
+cairn unblock <task-slug> "Got credentials, resuming work"
+```
 
 ### Multiple tasks
 

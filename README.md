@@ -16,6 +16,27 @@ This creates a workspace and writes two context files your agent reads automatic
 
 No agent-specific configuration. Any AI agent that can read files is ready to go.
 
+## Quick Start
+
+```bash
+# See what you're working on
+cairn my
+
+# Start a task
+cairn start implement-auth
+
+# Add notes as you work
+cairn note implement-auth "Using passport.js for OAuth"
+
+# Mark it done
+cairn done implement-auth
+
+# Check workspace status
+cairn status
+```
+
+For complete command reference, see [COMMANDS.md](COMMANDS.md).
+
 ## How it works
 
 You and your AI agent share a folder of markdown files. Projects have charters. Tasks have objectives. Status fields track where everything stands — like a kanban board backed by text files.
