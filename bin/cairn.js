@@ -31,6 +31,8 @@ import start from '../lib/commands/start.js';
 import done from '../lib/commands/done.js';
 import block from '../lib/commands/block.js';
 import view from '../lib/commands/view.js';
+import active from '../lib/commands/active.js';
+import my from '../lib/commands/my.js';
 
 // Onboard command - workspace setup with context files
 program
@@ -141,6 +143,18 @@ program
   .description('View complete task details')
   .option('--project <slug>', 'Project to search for the task')
   .action(view);
+
+// Active command - show all in_progress tasks
+program
+  .command('active')
+  .description('Show all tasks currently in progress')
+  .action(active);
+
+// My command - show all my tasks grouped by status
+program
+  .command('my')
+  .description('Show all tasks assigned to me, grouped by status')
+  .action(my);
 
 // Parse and handle errors
 program.parseAsync(process.argv).catch((error) => {
