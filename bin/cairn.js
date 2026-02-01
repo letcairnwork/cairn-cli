@@ -40,6 +40,7 @@ import note from '../lib/commands/note.js';
 import edit from '../lib/commands/edit.js';
 import search from '../lib/commands/search.js';
 import triage from '../lib/commands/triage.js';
+import learn from '../lib/commands/learn.js';
 
 // Onboard command - workspace setup with context files
 program
@@ -212,6 +213,13 @@ program
   .description('Process inbox items interactively - create tasks, delete, or skip')
   .option('--assignee <name>', 'Default assignee for created tasks', 'you')
   .action(triage);
+
+// Learn command - show system overview and documentation
+program
+  .command('learn')
+  .description('Show Cairn system overview and available documentation')
+  .option('--verbose', 'Show full documentation paths')
+  .action(learn);
 
 // Parse and handle errors
 program.parseAsync(process.argv).catch((error) => {
