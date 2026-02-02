@@ -167,28 +167,46 @@ cairn edit implement-auth
 Update task properties (artifacts, etc.)
 
 ```bash
-cairn update implement-auth --add-artifact "obsidian://open?vault=pagoda&file=Artifacts/Auth%20Design"
+cairn update implement-auth --add-artifact "../artifacts/auth-design.md"
+cairn update implement-auth --remove-artifact "../artifacts/old-doc.md"
 ```
+
+**Note:** Use `cairn artifact` to create and link artifacts automatically. Use `cairn update` only for manual adjustments.
 
 ## Artifact Management
 
 ### `cairn artifact <task-slug> <artifact-name>`
-Create an Obsidian artifact and automatically link it to the task
+Create a project artifact and link it to the task
 
 ```bash
 cairn artifact implement-auth "API Design Doc"
-cairn artifact implement-auth "Test Plan" --open
+cairn artifact implement-auth "Test Plan" --description "OAuth test coverage"
+cairn artifact implement-auth "Architecture Diagram" --open
 ```
 
 This:
-1. Creates `Artifacts/API Design Doc.md` in your Obsidian vault
-2. Generates the `obsidian://` URL
-3. Links it to the task
-4. Optionally opens it in Obsidian (with `--open`)
+1. Creates `projects/{project}/artifacts/api-design-doc.md`
+2. Links it to the task frontmatter with relative path `../artifacts/api-design-doc.md`
+3. Supports custom descriptions with `--description`
+4. Optionally opens it in your `$EDITOR` (with `--open`)
 
-**Environment variables:**
-- `OBSIDIAN_VAULT` - Path to your vault (default: `~/Obsidian/pagoda`)
-- `OBSIDIAN_VAULT_NAME` - Vault name for URLs (default: `pagoda`)
+**Artifact structure:**
+```
+projects/
+  launch-app/
+    artifacts/
+      api-design-doc.md
+      test-plan.md
+    tasks/
+      implement-auth.md    # References: ../artifacts/api-design-doc.md
+```
+
+**Task frontmatter with artifacts:**
+```yaml
+artifacts:
+  - path: ../artifacts/api-design-doc.md
+    description: API Design Doc
+```
 
 ## List & Filter Commands
 
@@ -253,7 +271,7 @@ cairn done implement-auth
 3. **Always update status** - `start` when beginning, `done` when finishing, `block` when stuck
 4. **Check `cairn status` periodically** to understand workspace health
 5. **Use `cairn search`** to find related tasks before creating duplicates
-6. **Create artifacts in Obsidian** using `cairn artifact` for deliverables
+6. **Create artifacts** using `cairn artifact` for design docs, proposals, and deliverables
 7. **Verify tasks exist with `cairn view`** after creating them
 
 ## Shell Aliases (Optional)

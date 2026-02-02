@@ -50,6 +50,7 @@ program
   .option('--force', 'Force re-onboarding even if already set up')
   .option('--agent <type>', 'Ignored (kept for backwards compatibility)')
   .option('--path <path>', 'Custom workspace path')
+  .option('--name <name>', 'Your name (for personalizing agent messages)')
   .action(onboard);
 
 // Init command - workspace only, no agent setup

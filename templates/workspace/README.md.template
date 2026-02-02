@@ -1,0 +1,90 @@
+# Welcome to Cairn 🦮
+
+You've successfully set up Cairn!
+
+## Your Workspace
+
+This folder (`{{WORKSPACE_PATH}}`) contains all your project files.
+
+### Structure
+
+```
+{{WORKSPACE_PATH}}/
+├── projects/          Your projects (e.g., "launch-my-app")
+├── inbox/             Quick capture area
+├── workers/           AI specialists who can help you
+├── memory/            Agent memory (daily logs + long-term)
+├── skills/            Shared knowledge for agents
+└── [other folders]
+```
+
+## Quick Start
+
+### 1. Explore the Example Project
+
+```bash
+cairn my                          # See your tasks
+cairn start explore-cairn         # Begin the tutorial
+```
+
+### 2. Create Your First Project
+
+```bash
+cairn create project "My Project" \
+  --description "What you're building" \
+  --objective "Why it matters" \
+  --criteria "What success looks like"
+```
+
+### 3. Add a Task
+
+```bash
+cairn create task "Task Name" \
+  --project my-project \
+  --description "What needs to be done" \
+  --objective "Clear definition of done"
+```
+
+### 4. Assign to a Worker
+
+Edit the task file and add:
+```yaml
+assignee: engineer  # or designer, qa, etc.
+```
+
+Available workers in `workers/` folder.
+
+## Key Files
+
+- **AGENTS.md** - Workspace conventions (agents read this)
+- **USER.md** - Who you are (helps agents personalize)
+- **TOOLS.md** - Your tool configs (SSH hosts, etc.)
+- **.cairn/planning.md** - Full planning guide
+- **workers/WORKERS.md** - How workers operate
+
+## CLI Reference
+
+```bash
+cairn my                       # Your current workload
+cairn create project <name>    # New project
+cairn create task <name>       # New task
+cairn start <task>             # Begin work
+cairn done <task>              # Mark complete
+cairn status                   # Workspace overview
+cairn --help                   # All commands
+```
+
+## Next Steps
+
+1. Complete the getting-started tasks
+2. Read AGENTS.md to understand workspace conventions
+3. Browse workers/ to see who can help
+4. Create your first real project
+
+## Learn More
+
+- Full CLI reference: `.cairn/planning.md`
+- Worker guide: `workers/WORKERS.md`
+- Shared skills: `skills/` folder
+
+Happy building! 🦮
