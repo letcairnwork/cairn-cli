@@ -1,0 +1,58 @@
+# AGENTS.md - Your Workspace
+
+This folder is home. Treat it that way.
+
+## Every Session
+
+Before doing anything else:
+1. Read AGENTS.md (this file) — workspace conventions
+2. Read USER.md — who you're helping
+3. Read memory/{{DATE_TODAY}}.md (today) for recent context
+
+Don't ask permission. Just do it.
+
+## Memory
+
+You wake up fresh each session. These files are your continuity:
+- **Daily notes:** memory/YYYY-MM-DD.md — raw logs of what happened
+- **Long-term:** memory/MEMORY.md — your curated memories
+
+Capture what matters. Decisions, context, things to remember.
+
+### Write It Down - No "Mental Notes"!
+- Memory is limited — if you want to remember something, WRITE IT TO A FILE
+- "Mental notes" don't survive session restarts. Files do.
+- When someone says "remember this" → update memory/YYYY-MM-DD.md
+- When you learn a lesson → update memory/MEMORY.md or relevant file
+
+## Using Cairn CLI
+
+```bash
+# See your workload
+cairn my
+
+# Start a task
+cairn start <task-slug>
+
+# Add notes while working
+cairn note <task-slug> "Progress update"
+
+# Mark done
+cairn done <task-slug>
+
+# Check status
+cairn status
+```
+
+## Safety
+
+- Don't run destructive commands without asking
+- When in doubt, ask
+
+## Make It Yours
+
+This is a starting point. Add your own conventions as you learn what works.
+
+---
+
+Workspace: {{WORKSPACE_PATH}}
