@@ -179,3 +179,31 @@ cairn update-skill        # Refresh templates after CLI update
 ## License
 
 MIT
+
+## Worker Management
+
+If your workspace includes a `workers/` folder with AI worker definitions, you can manage and view them using the `cairn worker` command:
+
+```bash
+# List all available workers
+cairn worker list
+
+# View a worker's full soul file
+cairn worker view engineer
+
+# List skills for a worker
+cairn worker skills engineer
+
+# View specific skill content
+cairn worker skill engineer typescript
+```
+
+**Worker Structure:**
+Workers are expected to follow the nested folder structure:
+- `workers/{name}/{name}.md` - Main worker soul file with frontmatter
+- `workers/{name}/skills/*.md` - Optional skills folder with specialized knowledge
+
+The CLI will automatically discover workers in:
+- `{workspace}/workers/` - Within your workspace
+- `{workspace-parent}/workers/` - Adjacent to your workspace
+
