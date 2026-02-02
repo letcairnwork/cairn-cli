@@ -41,6 +41,7 @@ import edit from '../lib/commands/edit.js';
 import search from '../lib/commands/search.js';
 import triage from '../lib/commands/triage.js';
 import learn from '../lib/commands/learn.js';
+import worker from '../lib/commands/worker.js';
 
 // Onboard command - workspace setup with context files
 program
@@ -220,6 +221,12 @@ program
   .description('Show Cairn system overview and available documentation')
   .option('--verbose', 'Show full documentation paths')
   .action(learn);
+
+// Worker command - manage and view workers
+program
+  .command('worker <action> [args...]')
+  .description('Manage workers (list, view, skills)')
+  .action(worker);
 
 // Parse and handle errors
 program.parseAsync(process.argv).catch((error) => {
