@@ -117,7 +117,7 @@ program
 // Update-skill command - refresh workspace context
 program
   .command('update-skill')
-  .description('Refresh workspace context files (CLAUDE.md + .cairn/planning.md)')
+  .description('Refresh workspace context files (AGENTS.md + .cairn/planning.md)')
   .action(updateSkill);
 
 // Upgrade command - check for and install CLI updates
