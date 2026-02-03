@@ -1,6 +1,6 @@
 {
   "name": "cairn-work",
-  "version": "0.14.0",
+  "version": "0.15.0",
   "description": "AI-native project management - optimized CLI for AI agents and humans working together",
   "type": "module",
   "bin": {
@@ -34,11 +34,11 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/gregoryehill/cairn.git"
+    "url": "https://github.com/letcairnwork/cairn-cli.git"
   },
-  "homepage": "https://cairn.app",
+  "homepage": "https://letcairn.work",
   "bugs": {
-    "url": "https://github.com/gregoryehill/cairn/issues"
+    "url": "https://github.com/letcairnwork/cairn-cli/issues"
   },
   "engines": {
     "node": ">=18.0.0"
