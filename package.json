@@ -17,7 +17,8 @@
   "files": [
     "bin/",
     "lib/",
-    "skills/"
+    "skills/",
+    "templates/"
   ],
   "keywords": [
     "project-management",
