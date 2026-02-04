@@ -1,5 +1,9 @@
 # Cairn
 
+[![npm version](https://img.shields.io/npm/v/cairn-work.svg)](https://www.npmjs.com/package/cairn-work)
+[![GitHub Discussions](https://img.shields.io/github/discussions/letcairnwork/cairn-cli)](https://github.com/letcairnwork/cairn-cli/discussions)
+[![Follow @letcairnwork](https://img.shields.io/twitter/follow/letcairnwork?style=social)](https://x.com/letcairnwork)
+
 Project management for AI agents. Markdown files are the source of truth.
 
 ## Setup
@@ -11,7 +15,7 @@ cairn onboard
 
 This creates a workspace and writes two context files your agent reads automatically:
 
-- **`CLAUDE.md`** — Compact reference for day-to-day operations (statuses, CLI commands, autonomy rules)
+- **`AGENTS.md`** — Compact reference for day-to-day operations (statuses, CLI commands, autonomy rules)
 - **`.cairn/planning.md`** — Full guide for creating projects and tasks with real content
 
 No agent-specific configuration. Any AI agent that can read files is ready to go.
@@ -46,7 +50,7 @@ You and your AI agent share a folder of markdown files. Projects have charters. 
 
 ```
 ~/cairn/
-  CLAUDE.md                        # Agent context (auto-generated)
+  AGENTS.md                        # Agent context (auto-generated)
   .cairn/planning.md               # Planning guide (auto-generated)
   projects/
     launch-app/
@@ -339,13 +343,13 @@ cairn doctor
 
 Validates:
 - Workspace structure
-- Context files (`CLAUDE.md`, `.cairn/planning.md`)
+- Context files (`AGENTS.md`, `.cairn/planning.md`)
 - Task frontmatter format
 - File organization
 
 ### `cairn update-skill`
 
-Refresh `CLAUDE.md` and `.cairn/planning.md` with the latest templates (e.g., after a CLI update).
+Refresh `AGENTS.md` and `.cairn/planning.md` with the latest templates (e.g., after a CLI update).
 
 ```bash
 cairn update-skill
@@ -613,7 +617,7 @@ Cairn is designed to work with any AI agent that can:
 - Follow a workflow (statuses, artifacts, logging)
 
 **Context files:**
-- `CLAUDE.md` — Quick reference for the agent (statuses, commands, rules)
+- `AGENTS.md` — Quick reference for the agent (statuses, commands, rules)
 - `.cairn/planning.md` — Detailed guide for creating projects and tasks
 
 These files are auto-generated during `cairn onboard` and updated with `cairn update-skill`.
@@ -627,6 +631,24 @@ These files are auto-generated during `cairn onboard` and updated with `cairn up
 6. Agent: Finishes and runs `cairn done implement-auth`
 7. Task moves to `review` (if `autonomy: draft`) or `completed` (if `autonomy: execute`)
 8. Human: Reviews artifacts and approves work
+
+## Community & Support
+
+- **[GitHub Discussions](https://github.com/letcairnwork/cairn-cli/discussions)** — Ask questions, share ideas, show what you're building, and give feedback. This is the best place to connect.
+- **[GitHub Issues](https://github.com/letcairnwork/cairn-cli/issues)** — Bug reports only. For feature requests and questions, use Discussions.
+- **[Twitter/X @letcairnwork](https://x.com/letcairnwork)** — Follow for updates, or drop a quick question.
+
+New here? [Introduce yourself in Discussions](https://github.com/letcairnwork/cairn-cli/discussions/categories/introductions) — we'd love to hear what you're working on.
+
+## Contributing
+
+Contributions are welcome! If you have an idea for a feature or improvement, [start a discussion](https://github.com/letcairnwork/cairn-cli/discussions) first so we can talk through the approach before you invest time in a PR.
+
+Found a bug? [Open an issue](https://github.com/letcairnwork/cairn-cli/issues).
+
+## What's Next
+
+The roadmap is shaped by community feedback. If there's something you'd like to see, [request it in Discussions](https://github.com/letcairnwork/cairn-cli/discussions/categories/ideas).
 
 ## License
 

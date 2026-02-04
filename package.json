@@ -1,6 +1,6 @@
 {
   "name": "cairn-work",
-  "version": "0.15.0",
+  "version": "1.0.1",
   "description": "AI-native project management - optimized CLI for AI agents and humans working together",
   "type": "module",
   "bin": {
@@ -17,7 +17,8 @@
   "files": [
     "bin/",
     "lib/",
-    "skills/"
+    "skills/",
+    "templates/"
   ],
   "keywords": [
     "project-management",
@@ -36,7 +37,7 @@
     "type": "git",
     "url": "https://github.com/letcairnwork/cairn-cli.git"
   },
-  "homepage": "https://letcairn.work",
+  "homepage": "https://cairn.quest",
   "bugs": {
     "url": "https://github.com/letcairnwork/cairn-cli/issues"
   },
