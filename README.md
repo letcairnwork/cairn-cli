@@ -11,7 +11,7 @@ cairn onboard
 
 This creates a workspace and writes two context files your agent reads automatically:
 
-- **`CLAUDE.md`** — Compact reference for day-to-day operations (statuses, CLI commands, autonomy rules)
+- **`AGENTS.md`** — Compact reference for day-to-day operations (statuses, CLI commands, autonomy rules)
 - **`.cairn/planning.md`** — Full guide for creating projects and tasks with real content
 
 No agent-specific configuration. Any AI agent that can read files is ready to go.
@@ -46,7 +46,7 @@ You and your AI agent share a folder of markdown files. Projects have charters. 
 
 ```
 ~/cairn/
-  CLAUDE.md                        # Agent context (auto-generated)
+  AGENTS.md                        # Agent context (auto-generated)
   .cairn/planning.md               # Planning guide (auto-generated)
   projects/
     launch-app/
@@ -339,13 +339,13 @@ cairn doctor
 
 Validates:
 - Workspace structure
-- Context files (`CLAUDE.md`, `.cairn/planning.md`)
+- Context files (`AGENTS.md`, `.cairn/planning.md`)
 - Task frontmatter format
 - File organization
 
 ### `cairn update-skill`
 
-Refresh `CLAUDE.md` and `.cairn/planning.md` with the latest templates (e.g., after a CLI update).
+Refresh `AGENTS.md` and `.cairn/planning.md` with the latest templates (e.g., after a CLI update).
 
 ```bash
 cairn update-skill
@@ -613,7 +613,7 @@ Cairn is designed to work with any AI agent that can:
 - Follow a workflow (statuses, artifacts, logging)
 
 **Context files:**
-- `CLAUDE.md` — Quick reference for the agent (statuses, commands, rules)
+- `AGENTS.md` — Quick reference for the agent (statuses, commands, rules)
 - `.cairn/planning.md` — Detailed guide for creating projects and tasks
 
 These files are auto-generated during `cairn onboard` and updated with `cairn update-skill`.
