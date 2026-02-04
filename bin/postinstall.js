@@ -51,5 +51,11 @@ try {
     log();
   }
 } catch {
-  process.exit(0);
+  // fall through
 }
+
+log();
+log('  \x1b[36mThanks for installing Cairn!\x1b[0m');
+log('  Join the community: \x1b[4mhttps://github.com/letcairnwork/cairn-cli/discussions\x1b[0m');
+log('  Follow for updates: \x1b[4mhttps://x.com/letcairnwork\x1b[0m');
+log();
