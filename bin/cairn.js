@@ -53,10 +53,10 @@ program
   .option('--name <name>', 'Your name (for personalizing agent messages)')
   .action(onboard);
 
-// Init command - workspace only, no agent setup
+// Init command - hidden alias for onboard (kept for backwards compatibility)
 program
-  .command('init')
-  .description('Initialize Cairn workspace (without agent configuration)')
+  .command('init', { hidden: true })
+  .description('Initialize Cairn workspace (alias for onboard)')
   .option('--path <path>', 'Custom workspace path (default: current directory)')
   .action(init);
 
