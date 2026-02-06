@@ -233,7 +233,7 @@ const dirs = [
 - living-room → Main area, 180° wide angle
 
 ### SSH (if applicable)
-- home-server → 192.168.1.100
+- home-server → 10.0.0.1
 
 ### Cairn CLI
 Workspace: ~/cairn
