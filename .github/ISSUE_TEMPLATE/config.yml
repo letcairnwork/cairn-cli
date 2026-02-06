@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Questions & Feature Requests
+    url: https://github.com/letcairnwork/cairn-cli/discussions
+    about: Ask questions, request features, or share feedback in Discussions.
+  - name: Quick Questions & Updates
+    url: https://x.com/letcairnwork
+    about: Follow @letcairnwork on Twitter/X for updates or quick questions.
