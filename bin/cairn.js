@@ -42,6 +42,7 @@ import search from '../lib/commands/search.js';
 import triage from '../lib/commands/triage.js';
 import learn from '../lib/commands/learn.js';
 import worker from '../lib/commands/worker.js';
+import comment from '../lib/commands/comment.js';
 
 // Onboard command - workspace setup with context files
 program
@@ -161,6 +162,16 @@ program
   .description('Add a quick note to task work log')
   .option('--project <slug>', 'Project to search for the task')
   .action(note);
+
+// Comment command - add comment to Convex (shows in app)
+program
+  .command('comment <task-slug> <message>')
+  .description('Add a comment to task (syncs to Cairn app)')
+  .option('--project <slug>', 'Project to search for the task')
+  .option('--type <type>', 'Comment type: question, progress, handoff, or comment', 'progress')
+  .option('--author <name>', 'Author name (defaults to $USER)')
+  .option('--author-type <type>', 'Author type: human or worker', 'worker')
+  .action(comment);
 
 // View command - show full task details
 program

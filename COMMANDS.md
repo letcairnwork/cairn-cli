@@ -149,6 +149,30 @@ Add a quick note to task work log (lightweight alternative to `cairn log`)
 cairn note implement-auth "Discovered passport.js library"
 ```
 
+### `cairn comment <task-slug> <message>`
+Add a comment that syncs to the Cairn app (visible in the web UI)
+
+```bash
+# Basic usage (defaults to progress type, worker author)
+cairn comment implement-auth "Started working on OAuth flow"
+
+# Different comment types
+cairn comment implement-auth "Need clarification on scope" --type question
+cairn comment implement-auth "Ready for handoff" --type handoff
+
+# Set author info
+cairn comment implement-auth "Reviewed the PR" --author "Scout" --author-type worker
+cairn comment implement-auth "Looks good!" --author "Gregory" --author-type human
+```
+
+**Comment types:**
+- `progress` (default) - Status updates
+- `question` - Questions needing answers
+- `handoff` - Handoff notes between workers
+- `comment` - General comments
+
+**Note:** Unlike `cairn note` which writes to the task file, `cairn comment` writes directly to the Convex database and appears in the Cairn web app. Requires authentication via cairnsync.
+
 ### `cairn log <task-slug> <message>`
 Add a detailed work log entry
 

@@ -314,6 +314,28 @@ cairn log implement-auth "Implemented OAuth2 flow with GitHub provider"
 cairn log implement-auth "Fixed edge case in token refresh" --title "Bug Fix"
 ```
 
+### `cairn comment`
+
+Add a comment that syncs to the Cairn app (visible in the web UI).
+
+```bash
+# Status update
+cairn comment implement-auth "Started OAuth implementation"
+
+# Ask a question
+cairn comment implement-auth "Should we support Google SSO?" --type question
+
+# Worker handoff
+cairn comment implement-auth "Ready for code review" --type handoff --author "Engineer"
+```
+
+**Options:**
+- `--type <type>`: Comment type (`progress`, `question`, `handoff`, `comment`)
+- `--author <name>`: Author name (defaults to `$USER`)
+- `--author-type <type>`: `worker` or `human` (defaults to `worker`)
+
+Unlike `cairn note` (which writes to the task file), `cairn comment` writes to Convex and appears in the Cairn web app. Requires cairnsync authentication.
+
 ### `cairn update`
 
 Update task properties programmatically.
